@@ -7,8 +7,6 @@
     android:orientation="vertical">
 
 
-
-
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:map="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -20,7 +18,7 @@
         tools:context="com.example.nelson.prototype_001.MainActivity" />
 
     <LinearLayout
-        android:id="@+id/linearLayout1"
+        android:id="@+id/linearLayoutHeading"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"

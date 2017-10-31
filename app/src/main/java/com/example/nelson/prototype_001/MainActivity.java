@@ -954,6 +954,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(1.3521, 103.8198), 100));
        // googleMap.setOnCameraIdleListener(mClusterManager);
 
+        googleMap.getUiSettings().setMapToolbarEnabled(false);
         gm=googleMap;
 
 
