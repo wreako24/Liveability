@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "446089364965",
+    "firebase_url": "https://liveability-a5a19.firebaseio.com",
+    "project_id": "liveability-a5a19",
+    "storage_bucket": "liveability-a5a19.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:446089364965:android:2fff5ddfcd158549",
+        "android_client_info": {
+          "package_name": "com.example.nelson.prototype_001"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "446089364965-ppdsr7gnu9qbo28sno3i41curq3igdpc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.nelson.prototype_001",
+            "certificate_hash": "e1e392ff23b3865e16c8d04f808f1614c9528d79"
+          }
+        },
+        {
+          "client_id": "446089364965-6jq9l4iv3iqh2l5vvrmkl42fi7rt70k8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXPut5GWmy6LNPj422HWzWOoLq0hDpdQ8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "446089364965-6jq9l4iv3iqh2l5vvrmkl42fi7rt70k8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

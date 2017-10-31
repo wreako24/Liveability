@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.nelson.prototype_001.MainActivity">
+
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <include
+            android:id="@+id/include"
+
+            layout="@layout/content_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible" />
+
+        <LinearLayout
+            android:layout_width="260dp"
+            android:layout_height="fill_parent"
+            android:layout_gravity="right"
+            android:background="#fff"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:orientation="horizontal">
+
+                <com.example.nelson.prototype_001.adapter.DynamicRecyclingView xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/listView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_gravity="bottom">
+
+                    <Button
+                        android:id="@+id/btnCancel"
+                        android:layout_width="130dp"
+                        android:layout_height="60dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_gravity="right|bottom"
+                        android:background="@drawable/button_border"
+                        android:text="Cancel"
+                        android:textColor="#000"></Button>
+
+                    <Button
+                        android:id="@+id/btnApply"
+                        android:layout_width="130dp"
+                        android:layout_height="60dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_gravity="left|bottom"
+                        android:background="@drawable/button_border"
+                        android:text="Apply"
+                        android:textColor="#000"></Button>
+
+                </LinearLayout>
+
+            </FrameLayout>
+        </LinearLayout>
+
+    </android.support.v4.widget.DrawerLayout>
+
+    <RelativeLayout
+        android:id="@+id/loadingPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:gravity="center">
+
+        <ProgressBar
+            android:id="@+id/pb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true" />
+
+    </RelativeLayout>
+
+    <include
+        android:id="@+id/sort_popper"
+        layout="@layout/sort_popup"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_margin="@dimen/fab_margin"
+        android:paddingTop="0dp"
+        app:elevation="10dp"
+        app:layout_anchor="@+id/sort_popper"
+        app:layout_anchorGravity="right|center|end"
+        app:srcCompat="@drawable/filter_criteria" />
+
+
+</android.support.design.widget.CoordinatorLayout>

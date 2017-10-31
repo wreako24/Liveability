@@ -1,0 +1,142 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rel_sort_container"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+
+    <LinearLayout
+
+        android:id="@+id/lin_sort_container"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="right"
+        android:layout_marginRight="15dp"
+        android:gravity="right"
+        android:orientation="vertical"
+        android:visibility="invisible">
+
+        <LinearLayout
+            android:id="@+id/sort_popup1"
+            android:layout_width="match_parent"
+            android:layout_height="15dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="0dp"
+            android:gravity="right">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:gravity="right"
+                android:src="@drawable/arrow_icon" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/button_border"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp">
+
+            <LinearLayout
+                android:id="@+id/popup_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="5dp"
+                    android:text="SORT BY: "
+                    android:textColor="#000" />
+
+                <TextView
+                    android:layout_width="300dp"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/button_border"
+                    android:text=" " />
+
+                <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RadioButton
+                        android:id="@+id/overall_criteria"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:checked="true"
+                        android:onClick="click_cri_oc"
+                        android:text=" OVERALL CRITERIA"
+                        android:textColor="@color/colorAccent" />
+
+                    <RadioButton
+                        android:id="@+id/environment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:onClick="click_cri_env"
+                        android:text=" ENVIRONMENT"
+                        android:textColor="@color/colorAccent" />
+
+                    <RadioButton
+                        android:id="@+id/education"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:onClick="click_cri_edu"
+                        android:text=" EDUCATION"
+                        android:textColor="@color/colorAccent" />
+
+                    <RadioButton
+                        android:id="@+id/healthcare"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:onClick="click_cri_hc"
+                        android:text=" HEALTHCARE"
+                        android:textColor="@color/colorAccent" />
+
+                    <RadioButton
+                        android:id="@+id/transport"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:onClick="click_cri_trans"
+                        android:text=" TRANSPORT"
+                        android:textColor="@color/colorAccent" />
+
+                    <RadioButton
+                        android:id="@+id/building"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:onClick="click_cri_build"
+                        android:text=" BUILDING"
+                        android:textColor="@color/colorAccent" />
+
+                    <RadioButton
+                        android:id="@+id/accessability"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:onClick="click_cri_access"
+                        android:text=" ACCESSABILITY"
+                        android:textColor="@color/colorAccent" />
+                </RadioGroup>
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>

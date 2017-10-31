@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Liveability</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="action_back">Back</string>
+    <string name="action_search">Search</string>
+    <string name="action_sort">Sort</string>
+    <string name="action_home">Home</string>
+    <string name="title_activity_criteria_detail">CriteriaDetailActivity</string>
+    <string name="search_view">Search</string>
+
+</resources>
