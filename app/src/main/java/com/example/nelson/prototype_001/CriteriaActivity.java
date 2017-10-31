@@ -57,6 +57,7 @@ public class CriteriaActivity extends AppCompatActivity implements OnMapReadyCal
     double transValue=0;
     double accessValue=0;
     double hi;
+    double bye;
 
 
 
