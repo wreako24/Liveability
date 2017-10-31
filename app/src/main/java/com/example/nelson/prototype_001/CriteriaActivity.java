@@ -2,11 +2,11 @@ package com.example.nelson.prototype_001;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.transition.Fade;
 import android.util.Log;
 import android.view.Menu;
@@ -16,7 +16,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.nelson.prototype_001.adapter.DynamicRecyclingView;
 import com.example.nelson.prototype_001.entity.MyItem;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -57,6 +56,7 @@ public class CriteriaActivity extends AppCompatActivity implements OnMapReadyCal
     double eduValue=0;
     double transValue=0;
     double accessValue=0;
+    double hi=0;
 
 
 
