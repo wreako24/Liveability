@@ -34,7 +34,9 @@ import com.example.nelson.prototype_001.adapter.DistrictAdapter;
 import com.example.nelson.prototype_001.adapter.DynamicRecyclingView;
 import com.example.nelson.prototype_001.adapter.Data;
 import com.example.nelson.prototype_001.controller.AddressToDistrictAPI;
+import com.example.nelson.prototype_001.controller.AlgoController;
 import com.example.nelson.prototype_001.controller.LiveableDBController;
+import com.example.nelson.prototype_001.entity.Coordinate;
 import com.example.nelson.prototype_001.entity.CriteriaCat;
 import com.example.nelson.prototype_001.entity.DataModel;
 import com.example.nelson.prototype_001.entity.District;
@@ -56,8 +58,6 @@ import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallback{
 // Android objects
@@ -66,9 +66,15 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
     private FloatingActionButton fab;
     private Button btnCancel;
     private Button btnApply;
-    ArrayList<String>districtNList=new ArrayList<>();
+    ArrayList<String> lwDistrictList =new ArrayList<>();
 
-
+    Rank aRank = new Rank(6,CriteriaCat.ACCESSIBILITY);
+    Rank bRank = new Rank(4,CriteriaCat.BUILDING);
+    Rank eRank = new Rank(1,CriteriaCat.EDUCATION);
+    Rank hRank = new Rank(2,CriteriaCat.HEALTHCARE);
+    Rank enRank = new Rank(3,CriteriaCat.ENVIRONMENT);
+    Rank tRank = new Rank(5,CriteriaCat.TRANSPORT);
+    ArrayList<Rank>rankList;
 
     private ClusterManager<MyItem> mClusterManager;
     private final static String mLogTag = "Main";
@@ -81,17 +87,10 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
 
 
 
-    Rank eRank = new Rank(1);
-    Rank tRank = new Rank(2);
-    Rank hRank = new Rank(3);
-    Rank enRank = new Rank(4);
-    Rank bRank = new Rank(5);
-    Rank aRank = new Rank(6);
-
     double sRank1,sRank2,sRank3;
-    ArrayList<District>districtRes;
-    LiveableDBController dbctrl;
-    int total;
+    ArrayList<District>districtRes=new ArrayList<>();
+    LiveableDBController dbctrl=new LiveableDBController();
+    AlgoController algoCtrl=new AlgoController();
     boolean clickFlag=true;
     boolean found=false;
 
@@ -121,7 +120,6 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
         dList.add(new Data(CriteriaCat.BUILDING.toString(), R.drawable.building_icon));
         dList.add(new Data(CriteriaCat.ACCESSIBILITY.toString(), R.drawable.accessiblity_icon));
 
-        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         sort_popup = (LinearLayout) findViewById(R.id.lin_sort_container);
         listView=(ListView)findViewById(R.id.list);
@@ -206,39 +204,48 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
         btnApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*btnApply.setBackgroundResource(0);
-                btnApply.setBackgroundColor(Color.parseColor("#038596"));
-                btnApply.setTextColor(Color.WHITE);*/
                 for (int i = 0; i < dList.size(); i++) {
                     switch(dList.get(i).title){
                         case "ACCESSIBILITY":
-                            aRank.setPosition(i+1);
+                            aRank.setPosition(i+1,CriteriaCat.ACCESSIBILITY);
                             break;
                         case "BUILDING":
-                            bRank.setPosition(i+1);
+                            bRank.setPosition(i+1,CriteriaCat.BUILDING);
                             break;
                         case "ENVIRONMENT":
-                            enRank.setPosition(i+1);
+                            enRank.setPosition(i+1,CriteriaCat.ENVIRONMENT);
                             break;
                         case "HEALTHCARE":
-                            hRank.setPosition(i+1);
+                            hRank.setPosition(i+1,CriteriaCat.HEALTHCARE);
                             break;
                         case "TRANSPORT":
-                            tRank.setPosition(i+1);
+                            tRank.setPosition(i+1,CriteriaCat.TRANSPORT);
                             break;
                         case "EDUCATION":
-                            eRank.setPosition(i+1);
+                            eRank.setPosition(i+1,CriteriaCat.EDUCATION);
                     }
 
 
                 }
+
+                rankList=new ArrayList<>();
+
+                rankList.add(aRank);
+                rankList.add(bRank);
+                rankList.add(enRank);
+                rankList.add(hRank);
+                rankList.add(tRank);
+                rankList.add(eRank);
+
+
                 adapter.notifyDataSetChanged();
                 Log.e(mLogTag,String.valueOf(aRank.getRankWeightage()));
                 draw.closeDrawer(Gravity.RIGHT);
 
 
                 clickFlag=true;
-                refreshData(CriteriaCat.ORIGINAL);
+
+               refreshData(CriteriaCat.ORIGINAL);
 
                 refreshList();
 
@@ -277,7 +284,7 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
         });
 
 
-        refreshData(CriteriaCat.ORIGINAL);
+        initData(CriteriaCat.ORIGINAL);
 
     }
 
@@ -317,86 +324,56 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
     }
 
 
-
     public void refreshData(final CriteriaCat criCat){
 
 
-        districtRes=new ArrayList<>();
-        districtRes.clear();
+        districtRes=dbctrl.refresh(rankList);
+        districtRes=algoCtrl.sortDistrict(districtRes,criCat);
 
-        districtRes=dbctrl.init();
+        for(int i=0;i<districtRes.size();i++) {
+            dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i+1), districtRes.get(i).getName(),false));
+
+            switch(i){
+                case 0:
+                    sRank1= districtRes.get(i).getValue();
+                    break;
+                case 1:
+                    sRank2=  districtRes.get(i).getValue();
+                    break;
+                case 2:
+                    sRank3= districtRes.get(i).getValue();
+                    break;
+            }
+
+            adapter.notifyDataSetChanged();
+
+            for (int j = 0; j < districtRes.size(); i++) {
+                display(districtRes.get(j).getValue(), districtRes.get(j).getName());
+            }
+
+        }
+    }
+
+
+
+    public void initData(final CriteriaCat criCat){
+
+        districtRes.clear();
+        districtRes=new ArrayList<>();
+
+
         dataModels= new ArrayList<>();
 
-        
-                if(criCat.equals(CriteriaCat.ACCESSIBILITY)){
-                    Collections.sort(districtRes, new Comparator<District>() {
-                        @Override
-                        public int compare(District c1,District c2) {
-                            return Double.compare(c2.getCriteriaValue(CriteriaCat.ACCESSIBILITY),c1.getCriteriaValue(CriteriaCat.ACCESSIBILITY));
-                        }
-                    });
-                }
-
-                if(criCat.equals(CriteriaCat.TRANSPORT)){
-                    Collections.sort(districtRes, new Comparator<District>() {
-                        @Override
-                        public int compare(District c1,District c2) {
-                            return Double.compare(c2.getCriteriaValue(CriteriaCat.TRANSPORT),c1.getCriteriaValue(CriteriaCat.TRANSPORT));
-                        }
-                    });
-                }
-
-                if(criCat.equals(CriteriaCat.HEALTHCARE)){
-                    Collections.sort(districtRes, new Comparator<District>() {
-                        @Override
-                        public int compare(District c1,District c2) {
-                            return Double.compare(c2.getCriteriaValue(CriteriaCat.HEALTHCARE),c1.getCriteriaValue(CriteriaCat.HEALTHCARE));
-                        }
-                    });
-                }
-
-                if(criCat.equals(CriteriaCat.ENVIRONMENT)){
-                    Collections.sort(districtRes, new Comparator<District>() {
-                        @Override
-                        public int compare(District c1,District c2) {
-                            return Double.compare(c2.getCriteriaValue(CriteriaCat.ENVIRONMENT),c1.getCriteriaValue(CriteriaCat.ENVIRONMENT));
-                        }
-                    });
-                }
-
-                if(criCat.equals(CriteriaCat.EDUCATION)){
-                    Collections.sort(districtRes, new Comparator<District>() {
-                        @Override
-                        public int compare(District c1,District c2) {
-                            return Double.compare(c2.getCriteriaValue(CriteriaCat.EDUCATION),c1.getCriteriaValue(CriteriaCat.EDUCATION));
-                        }
-                    });
-                }
-
-                if(criCat.equals(CriteriaCat.BUILDING)){
-                    Collections.sort(districtRes, new Comparator<District>() {
-                        @Override
-                        public int compare(District c1,District c2) {
-                            return Double.compare(c2.getCriteriaValue(CriteriaCat.BUILDING),c1.getCriteriaValue(CriteriaCat.BUILDING));
-                        }
-                    });
-                }
 
 
-                if(criCat.equals(CriteriaCat.ORIGINAL)) {
-                    Collections.sort(districtRes, new Comparator<District>() {
-                        @Override
-                        public int compare(District c1, District c2) {
-                            return Double.compare(c2.getValue(), c1.getValue());
-                        }
-                    });
-                }
 
+               districtRes=dbctrl.init();
+               districtRes=algoCtrl.sortDistrict(districtRes,criCat);
+
+               for(int i=0;i<districtRes.size();i++)
+                   Log.e(mLogTag,districtRes.get(i).getName());
 
                 for(int i=0;i<districtRes.size();i++) {
-
-                    total+=districtRes.get(i).getValue();
-
                     dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i+1), districtRes.get(i).getName(),false));
 
                     switch(i){
@@ -410,11 +387,7 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
                             sRank3= districtRes.get(i).getValue();
                             break;
                     }
-
-
                 }
-                Log.e(mLogTag,String.valueOf(total));
-
 
                 adapter= new DistrictAdapter(dataModels,getApplicationContext());
 
@@ -437,21 +410,17 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
                     }
                 });
 
-
-
-                if(clickFlag) {
                     for (int i = 0; i < districtRes.size(); i++) {
                         display(districtRes.get(i).getValue(), districtRes.get(i).getName());
                     }
-                    clickFlag=false;
-                }
 
-               districtNList.clear();
+                   lwDistrictList.clear();
+
                    for (int i = 0; i < districtRes.size(); i++) {
-                       districtNList.add(districtRes.get(i).getName());
+                       lwDistrictList.add(districtRes.get(i).getName());
                    }
 
-               updateCoor(districtRes.get(0).getName());
+              // updateCoor(districtRes.get(0).getRegionCoordinate());
             }
 
 
@@ -502,7 +471,7 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
         });
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_dropdown_item_1line, districtNList);
+                android.R.layout.simple_dropdown_item_1line, lwDistrictList);
         searchAutoComplete.setAdapter(adapter);
 
 
@@ -693,27 +662,19 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
         return score;
     }
 
-    private void updateCoor(final String searchString){
-
-        mDatabase.child("District").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-
-                snapshot.child(searchString);
-                double lat=0;
-                double lng=0;
+    private void updateCoor(Coordinate coor){
 
 
-                lat=Double.parseDouble(snapshot.child(searchString).child("district_lat").getValue().toString());
-                lng=Double.parseDouble(snapshot.child(searchString).child("district_long").getValue().toString());
+                double lat=coor.getLatitude();
+                double lng=coor.getLongitude();
+
+
+
 
                 gm.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat,lng ), 17));
                 findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 
 
-            }
-            @Override public void onCancelled(DatabaseError error) { }
-        });
     }
 
 

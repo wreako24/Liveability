@@ -1,6 +1,12 @@
 package com.example.nelson.prototype_001.controller;
 
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
+import android.util.Log;
+
+import com.example.nelson.prototype_001.LiveabilityUI;
 import com.example.nelson.prototype_001.entity.District;
+import com.example.nelson.prototype_001.entity.Rank;
 import com.example.nelson.prototype_001.liveInterface.DatabaseInterface;
 
 import java.util.ArrayList;
@@ -11,11 +17,23 @@ import java.util.ArrayList;
 
 public class LiveableDBController {
 
-    ArrayList<District>districtRes;
+    DatabaseInterface db=new Firebase();
+    ArrayList<District>districtRes=new ArrayList<>();
+
 
     public ArrayList<District> init(){
-        DatabaseInterface db=new Firebase();
+
+
+        db=new Firebase();
+        districtRes=new ArrayList<>();
         districtRes=db.initialize();
+
+        return districtRes;
+    }
+
+    public ArrayList<District> refresh(ArrayList<Rank>rankList){
+        districtRes=db.refreshData(rankList);
+
 
         return districtRes;
     }

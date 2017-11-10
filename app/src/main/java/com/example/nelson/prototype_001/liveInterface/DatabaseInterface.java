@@ -1,6 +1,7 @@
 package com.example.nelson.prototype_001.liveInterface;
 
 import com.example.nelson.prototype_001.entity.District;
+import com.example.nelson.prototype_001.entity.Rank;
 
 import java.util.ArrayList;
 
@@ -11,6 +12,8 @@ import java.util.ArrayList;
 public interface DatabaseInterface {
 
     ArrayList<District> initialize();
+
+    ArrayList<District> refreshData(ArrayList<Rank>rankList);
 
     void getData();
 

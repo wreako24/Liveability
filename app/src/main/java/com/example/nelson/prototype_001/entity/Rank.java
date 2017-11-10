@@ -10,11 +10,13 @@ package com.example.nelson.prototype_001.entity;
 
 public class Rank {
     int position;
+    CriteriaCat cat;
     double rankWeightage;
     final int MULTIPLIER=3;
 
-    public Rank(int position) {
+    public Rank(int position,CriteriaCat cat) {
         this.position  = position;
+        this.cat=cat;
 
         switch(position) {
             case 1: rankWeightage = 9*MULTIPLIER;
@@ -38,9 +40,10 @@ public class Rank {
         return position;
     }
 
-    public void setPosition(int position) {
+    public void setPosition(int position,CriteriaCat cat) {
 
         this.position=position;
+        this.cat=cat;
 
         switch(position) {
             case 1: rankWeightage = 9*MULTIPLIER;
@@ -60,7 +63,16 @@ public class Rank {
         }
     }
 
+    public CriteriaCat getCat() {
+        return cat;
+    }
+
+    public void setCat(CriteriaCat cat) {
+        this.cat = cat;
+    }
+
     public double getRankWeightage() {
+
         return rankWeightage;
     }
 
