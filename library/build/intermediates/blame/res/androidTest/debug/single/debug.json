@@ -8,12 +8,12 @@
         "source": "C:\\Users\\Nelson\\Documents\\Prototype_0.01\\library\\build\\intermediates\\bundles\\debug\\res\\drawable-xxhdpi-v4\\amu_bubble_mask.9.png"
     },
     {
-        "merged": "C:\\Users\\Nelson\\Documents\\Prototype_0.01\\library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-tvdpi-v4_common_google_signin_btn_icon_light_disabled.9.png.flat",
-        "source": "C:\\Users\\Nelson\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-base-9.6.1.aar\\ddcdf576093fd56149af9f0f558e2b42\\res\\drawable-tvdpi-v4\\common_google_signin_btn_icon_light_disabled.9.png"
-    },
-    {
         "merged": "C:\\Users\\joelc\\AndroidStudioProjects\\Liveability\\library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xxhdpi-v4_common_google_signin_btn_icon_dark_disabled.9.png.flat",
         "source": "C:\\Users\\joelc\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-base-9.6.1.aar\\07f89147365425aa4a6df2b5dd9e8ddf\\res\\drawable-xxhdpi-v4\\common_google_signin_btn_icon_dark_disabled.9.png"
+    },
+    {
+        "merged": "C:\\Users\\Nelson\\Documents\\Prototype_0.01\\library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-tvdpi-v4_common_google_signin_btn_icon_light_disabled.9.png.flat",
+        "source": "C:\\Users\\Nelson\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-base-9.6.1.aar\\ddcdf576093fd56149af9f0f558e2b42\\res\\drawable-tvdpi-v4\\common_google_signin_btn_icon_light_disabled.9.png"
     },
     {
         "merged": "C:\\Users\\Nelson\\Documents\\Prototype_0.01\\library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4_common_google_signin_btn_text_dark_normal.9.png.flat",
@@ -44,20 +44,20 @@
         "source": "C:\\Users\\joelc\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-base-9.6.1.aar\\07f89147365425aa4a6df2b5dd9e8ddf\\res\\drawable-xhdpi-v4\\common_google_signin_btn_text_light_normal.9.png"
     },
     {
-        "merged": "C:\\Users\\joelc\\AndroidStudioProjects\\Liveability\\library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xxhdpi-v4_common_google_signin_btn_icon_dark_pressed.9.png.flat",
-        "source": "C:\\Users\\joelc\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-base-9.6.1.aar\\07f89147365425aa4a6df2b5dd9e8ddf\\res\\drawable-xxhdpi-v4\\common_google_signin_btn_icon_dark_pressed.9.png"
-    },
-    {
         "merged": "C:\\Users\\joelc\\AndroidStudioProjects\\Liveability\\library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4_common_google_signin_btn_icon_light_disabled.9.png.flat",
         "source": "C:\\Users\\joelc\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-base-9.6.1.aar\\07f89147365425aa4a6df2b5dd9e8ddf\\res\\drawable-hdpi-v4\\common_google_signin_btn_icon_light_disabled.9.png"
     },
     {
-        "merged": "C:\\Users\\joelc\\AndroidStudioProjects\\Liveability\\library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4_common_google_signin_btn_text_dark_normal.9.png.flat",
-        "source": "C:\\Users\\joelc\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-base-9.6.1.aar\\07f89147365425aa4a6df2b5dd9e8ddf\\res\\drawable-xhdpi-v4\\common_google_signin_btn_text_dark_normal.9.png"
+        "merged": "C:\\Users\\joelc\\AndroidStudioProjects\\Liveability\\library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xxhdpi-v4_common_google_signin_btn_icon_dark_pressed.9.png.flat",
+        "source": "C:\\Users\\joelc\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-base-9.6.1.aar\\07f89147365425aa4a6df2b5dd9e8ddf\\res\\drawable-xxhdpi-v4\\common_google_signin_btn_icon_dark_pressed.9.png"
     },
     {
         "merged": "C:\\Users\\joelc\\AndroidStudioProjects\\Liveability\\library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable_common_google_signin_btn_text_light.xml.flat",
         "source": "C:\\Users\\joelc\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-base-9.6.1.aar\\07f89147365425aa4a6df2b5dd9e8ddf\\res\\drawable\\common_google_signin_btn_text_light.xml"
+    },
+    {
+        "merged": "C:\\Users\\joelc\\AndroidStudioProjects\\Liveability\\library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4_common_google_signin_btn_text_dark_normal.9.png.flat",
+        "source": "C:\\Users\\joelc\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-base-9.6.1.aar\\07f89147365425aa4a6df2b5dd9e8ddf\\res\\drawable-xhdpi-v4\\common_google_signin_btn_text_dark_normal.9.png"
     },
     {
         "merged": "C:\\Users\\Nelson\\Documents\\Prototype_0.01\\library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4_common_ic_googleplayservices.png.flat",
@@ -120,12 +120,12 @@
         "source": "C:\\Users\\joelc\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-base-9.6.1.aar\\07f89147365425aa4a6df2b5dd9e8ddf\\res\\drawable-xhdpi-v4\\common_google_signin_btn_icon_light_focused.9.png"
     },
     {
-        "merged": "C:\\Users\\Nelson\\Documents\\Prototype_0.01\\library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-tvdpi-v4_common_google_signin_btn_text_light_normal.9.png.flat",
-        "source": "C:\\Users\\Nelson\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-base-9.6.1.aar\\ddcdf576093fd56149af9f0f558e2b42\\res\\drawable-tvdpi-v4\\common_google_signin_btn_text_light_normal.9.png"
-    },
-    {
         "merged": "C:\\Users\\joelc\\AndroidStudioProjects\\Liveability\\library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4_common_google_signin_btn_text_dark_focused.9.png.flat",
         "source": "C:\\Users\\joelc\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-base-9.6.1.aar\\07f89147365425aa4a6df2b5dd9e8ddf\\res\\drawable-hdpi-v4\\common_google_signin_btn_text_dark_focused.9.png"
+    },
+    {
+        "merged": "C:\\Users\\Nelson\\Documents\\Prototype_0.01\\library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-tvdpi-v4_common_google_signin_btn_text_light_normal.9.png.flat",
+        "source": "C:\\Users\\Nelson\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-base-9.6.1.aar\\ddcdf576093fd56149af9f0f558e2b42\\res\\drawable-tvdpi-v4\\common_google_signin_btn_text_light_normal.9.png"
     },
     {
         "merged": "C:\\Users\\joelc\\AndroidStudioProjects\\Liveability\\library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-mdpi-v4_common_google_signin_btn_text_light_disabled.9.png.flat",
@@ -204,12 +204,12 @@
         "source": "C:\\Users\\Nelson\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-base-9.6.1.aar\\ddcdf576093fd56149af9f0f558e2b42\\res\\drawable-mdpi-v4\\common_google_signin_btn_text_dark_normal.9.png"
     },
     {
-        "merged": "C:\\Users\\joelc\\AndroidStudioProjects\\Liveability\\library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable_common_google_signin_btn_text_dark.xml.flat",
-        "source": "C:\\Users\\joelc\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-base-9.6.1.aar\\07f89147365425aa4a6df2b5dd9e8ddf\\res\\drawable\\common_google_signin_btn_text_dark.xml"
-    },
-    {
         "merged": "C:\\Users\\joelc\\AndroidStudioProjects\\Liveability\\library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-mdpi-v4_common_google_signin_btn_icon_light_focused.9.png.flat",
         "source": "C:\\Users\\joelc\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-base-9.6.1.aar\\07f89147365425aa4a6df2b5dd9e8ddf\\res\\drawable-mdpi-v4\\common_google_signin_btn_icon_light_focused.9.png"
+    },
+    {
+        "merged": "C:\\Users\\joelc\\AndroidStudioProjects\\Liveability\\library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable_common_google_signin_btn_text_dark.xml.flat",
+        "source": "C:\\Users\\joelc\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-base-9.6.1.aar\\07f89147365425aa4a6df2b5dd9e8ddf\\res\\drawable\\common_google_signin_btn_text_dark.xml"
     },
     {
         "merged": "C:\\Users\\Nelson\\Documents\\Prototype_0.01\\library\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_amu_webview.xml.flat",
@@ -224,12 +224,12 @@
         "source": "C:\\Users\\joelc\\AndroidStudioProjects\\Liveability\\library\\build\\intermediates\\bundles\\debug\\res\\raw\\amu_multigeometry_placemarks.kml"
     },
     {
-        "merged": "C:\\Users\\Nelson\\Documents\\Prototype_0.01\\library\\build\\intermediates\\res\\merged\\androidTest\\debug\\raw_amu_multigeometry_placemarks.kml.flat",
-        "source": "C:\\Users\\Nelson\\Documents\\Prototype_0.01\\library\\build\\intermediates\\bundles\\debug\\res\\raw\\amu_multigeometry_placemarks.kml"
-    },
-    {
         "merged": "C:\\Users\\joelc\\AndroidStudioProjects\\Liveability\\library\\build\\intermediates\\res\\merged\\androidTest\\debug\\raw_amu_ballon_gx_prefix.kml.flat",
         "source": "C:\\Users\\joelc\\AndroidStudioProjects\\Liveability\\library\\build\\intermediates\\bundles\\debug\\res\\raw\\amu_ballon_gx_prefix.kml"
+    },
+    {
+        "merged": "C:\\Users\\Nelson\\Documents\\Prototype_0.01\\library\\build\\intermediates\\res\\merged\\androidTest\\debug\\raw_amu_multigeometry_placemarks.kml.flat",
+        "source": "C:\\Users\\Nelson\\Documents\\Prototype_0.01\\library\\build\\intermediates\\bundles\\debug\\res\\raw\\amu_multigeometry_placemarks.kml"
     },
     {
         "merged": "C:\\Users\\Nelson\\Documents\\Prototype_0.01\\library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4_common_google_signin_btn_icon_light_pressed.9.png.flat",
