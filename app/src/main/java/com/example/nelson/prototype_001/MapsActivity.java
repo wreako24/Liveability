@@ -59,6 +59,7 @@ public abstract class MapsActivity extends FragmentActivity implements OnMapRead
         mMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(1.3521,103.8198) , 14.0f) );
 
 
+
         startDemo();
     }
 

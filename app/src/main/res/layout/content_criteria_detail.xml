@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        tools:context="com.example.nelson.prototype_001.MainActivity" />
+        tools:context="com.example.nelson.prototype_001.LiveabilityUI" />
 
     <ListView
         android:id="@+id/detail_list"

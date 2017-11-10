@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.nelson.prototype_001.MainActivity">
+    android:orientation="vertical"
+    tools:context="com.example.nelson.prototype_001.LiveabilityUI">
 
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawer_layout"
@@ -94,14 +95,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
-        android:layout_margin="10dp"
+        android:layout_margin="11dp"
         android:layout_marginBottom="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginLeft="0dp"
         android:padding="0dp"
         android:paddingBottom="0dp"
-        android:paddingTop="0dp"
         app:elevation="10dp"
         app:layout_anchor="@id/map"
-        app:layout_anchorGravity="bottom|center_horizontal|end"
+        app:layout_anchorGravity="bottom|right"
         app:srcCompat="@drawable/filter_criteria" />
 
 

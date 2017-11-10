@@ -34,8 +34,7 @@ import com.example.nelson.prototype_001.adapter.DistrictAdapter;
 import com.example.nelson.prototype_001.adapter.DynamicRecyclingView;
 import com.example.nelson.prototype_001.adapter.Data;
 import com.example.nelson.prototype_001.controller.AddressToDistrictAPI;
-import com.example.nelson.prototype_001.controller.AlgoCtrl;
-import com.example.nelson.prototype_001.entity.Criteria;
+import com.example.nelson.prototype_001.controller.LiveableDBController;
 import com.example.nelson.prototype_001.entity.CriteriaCat;
 import com.example.nelson.prototype_001.entity.DataModel;
 import com.example.nelson.prototype_001.entity.District;
@@ -60,7 +59,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback{
+public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallback{
 // Android objects
     private DrawerLayout draw;
     private boolean flag = false;
@@ -73,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private ClusterManager<MyItem> mClusterManager;
     private final static String mLogTag = "Main";
+
     ArrayList<DataModel> dataModels;
     ListView listView;
     private static DistrictAdapter adapter;
@@ -88,8 +88,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     Rank bRank = new Rank(5);
     Rank aRank = new Rank(6);
 
-    int sRank1,sRank2,sRank3;
+    double sRank1,sRank2,sRank3;
     ArrayList<District>districtRes;
+    LiveableDBController dbctrl;
     int total;
     boolean clickFlag=true;
     boolean found=false;
@@ -107,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setTitle("Liveability!");
+        setTitle("Liveability");
         //Get Map
         final SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -315,102 +316,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         dList.set(indexTwo, temp);
     }
 
+
+
     public void refreshData(final CriteriaCat criCat){
 
-        fab.setVisibility(View.VISIBLE);
 
+        districtRes=new ArrayList<>();
+        districtRes.clear();
+
+        districtRes=dbctrl.init();
         dataModels= new ArrayList<>();
 
-        mDatabase.child("Criteria").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-
-                districtRes=new ArrayList<>();
-                districtRes.clear();
-                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-
-                    ArrayList<Criteria>cList=new ArrayList<Criteria>();
-
-                    Criteria c1;
-
-                    Log.e(mLogTag,String.valueOf(aRank.getRankWeightage()));
-
-
-                    if(postSnapshot.child("Accessibility").child("criteria_value").getValue()!=null) {
-                        double aScore=Double.parseDouble(postSnapshot.child("Accessibility").child("criteria_value").getValue().toString());
-
-                        c1=new Criteria();
-                        c1.setCriteriaCategory(CriteriaCat.ACCESSIBILITY );
-                        c1.setCriteriaRank(aRank);
-                        c1.setCriteriaValue(Math.log(aScore));
-                        cList.add(c1);
-                    }
-
-                    if(postSnapshot.child("Building").child("criteria_value").getValue()!=null) {
-                        double bScore=Double.parseDouble(postSnapshot.child("Building").child("criteria_value").getValue().toString());
-
-                        c1=new Criteria();
-                        c1.setCriteriaCategory(CriteriaCat.BUILDING);
-                        c1.setCriteriaValue(Math.log(bScore));
-                        c1.setCriteriaRank(bRank);
-                        cList.add(c1);
-                    }
-
-                    if(postSnapshot.child("Education").child("criteria_value").getValue()!=null) {
-                        double eScore=Double.parseDouble(postSnapshot.child("Education").child("criteria_value").getValue().toString());
-
-                        c1=new Criteria();
-                        c1.setCriteriaCategory(CriteriaCat.EDUCATION);
-                        c1.setCriteriaValue(Math.log(eScore));
-                        c1.setCriteriaRank(eRank);
-                        cList.add(c1);
-
-                    }
-
-                    if(postSnapshot.child("Environment").child("criteria_value").getValue()!=null) {
-                        double enScore= Double.parseDouble(postSnapshot.child("Environment").child("criteria_value").getValue().toString());
-
-                        c1=new Criteria();
-                        c1.setCriteriaCategory(CriteriaCat.ENVIRONMENT);
-                        c1.setCriteriaValue(Math.log(enScore));
-                        c1.setCriteriaRank(enRank);
-                        cList.add(c1);
-
-                    }
-                    if(postSnapshot.child("Healthcare").child("criteria_value").getValue()!=null) {
-                        double hScore=Double.parseDouble(postSnapshot.child("Healthcare").child("criteria_value").getValue().toString());
-
-                        c1=new Criteria();
-                        c1.setCriteriaCategory(CriteriaCat.HEALTHCARE);
-                        c1.setCriteriaValue(Math.log(hScore));
-                        c1.setCriteriaRank(hRank);
-                        cList.add(c1);
-                    }
-
-                    if(postSnapshot.child("Transport").child("criteria_value").getValue()!=null) {
-                        double tScore=Double.parseDouble(postSnapshot.child("Transport").child("criteria_value").getValue().toString());
-
-                        c1=new Criteria();
-                        c1.setCriteriaCategory(CriteriaCat.TRANSPORT);
-                        c1.setCriteriaValue(Math.log(tScore));
-                        c1.setCriteriaRank(tRank);
-                        cList.add(c1);
-                    }
-
-
-
-                    District d1=new District();
-                    d1.setCriteriaList(cList);
-                    d1.setName(postSnapshot.getKey().toString());
-                    d1.setValue(AlgoCtrl.computeDistrictValue(d1));
-
-
-
-                    districtRes.add(d1);
-                }
-
-
-
+        
                 if(criCat.equals(CriteriaCat.ACCESSIBILITY)){
                     Collections.sort(districtRes, new Comparator<District>() {
                         @Override
@@ -484,13 +401,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                     switch(i){
                         case 0:
-                            sRank1= (int) districtRes.get(i).getValue();
+                            sRank1= districtRes.get(i).getValue();
                             break;
                         case 1:
-                            sRank2= (int) districtRes.get(i).getValue();
+                            sRank2=  districtRes.get(i).getValue();
                             break;
                         case 2:
-                            sRank3= (int) districtRes.get(i).getValue();
+                            sRank3= districtRes.get(i).getValue();
                             break;
                     }
 
@@ -508,13 +425,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                         DataModel dataModel= dataModels.get(position);
 
-                        Intent myIntent = new Intent(MainActivity.this, CriteriaActivity.class);
+                        Intent myIntent = new Intent(LiveabilityUI.this, CriteriaActivity.class);
                         Bundle extras = new Bundle();
                         extras.putString("key",dataModel.getDistrict());
                         extras.putString("score",dataModel.getScore());
                         myIntent.putExtras(extras);
 
-                        MainActivity.this.startActivity(myIntent);
+                        LiveabilityUI.this.startActivity(myIntent);
 
 
                     }
@@ -536,9 +453,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                updateCoor(districtRes.get(0).getName());
             }
-            @Override public void onCancelled(DatabaseError error) { }
-        });
-    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -574,14 +489,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 String searchString=(String)parent.getItemAtPosition(position);
                 searchAutoComplete.setText(""+searchString);
 
-                Intent myIntent = new Intent(MainActivity.this, CriteriaActivity.class);
+                Intent myIntent = new Intent(LiveabilityUI.this, CriteriaActivity.class);
                 Bundle extras = new Bundle();
                 extras.putString("key",searchString);
-                double score=0;
                 extras.putString("score",Double.toString(getScore(searchString)));
                 myIntent.putExtras(extras);
 
-                MainActivity.this.startActivity(myIntent);
+                LiveabilityUI.this.startActivity(myIntent);
 
 
             }
@@ -612,13 +526,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 for(int i=0;i<districtRes.size();i++){
                     if(query.equals(districtRes.get(i).getName())){
                         found=true;
-                        Intent myIntent = new Intent(MainActivity.this, CriteriaActivity.class);
+                        Intent myIntent = new Intent(LiveabilityUI.this, CriteriaActivity.class);
                         Bundle extras = new Bundle();
                         extras.putString("key",query);
                         extras.putString("score",Double.toString(getScore(query)));
                         myIntent.putExtras(extras);
 
-                        MainActivity.this.startActivity(myIntent);
+                        LiveabilityUI.this.startActivity(myIntent);
                     }
 
                 }
@@ -632,7 +546,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             super.onPreExecute();
 
 
-                            progressDialog = new ProgressDialog(MainActivity.this);
+                            progressDialog = new ProgressDialog(LiveabilityUI.this);
                             progressDialog.setMessage("Searching address");
                             progressDialog.setCancelable(false);
                             progressDialog.show();
@@ -646,14 +560,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             district[0] = atd.getDistrict(query);
 
                             if (!district[0].equals("null")) {
-                                Intent myIntent = new Intent(MainActivity.this, CriteriaActivity.class);
+                                Intent myIntent = new Intent(LiveabilityUI.this, CriteriaActivity.class);
                                 Bundle extras = new Bundle();
                                 extras.putString("key", district[0]);
                                 double score = 0;
                                 extras.putString("score", Double.toString(getScore(district[0])));
                                 myIntent.putExtras(extras);
 
-                                MainActivity.this.startActivity(myIntent);
+                                LiveabilityUI.this.startActivity(myIntent);
 
                             } else {
 
@@ -673,14 +587,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                         }
                     }.execute();
-
                     found=false;
                 }
 
-
-
-
-                hideKeyboardwithoutPopulate(MainActivity.this);
+                hideKeyboardwithoutPopulate(LiveabilityUI.this);
                 return true;
             }
         };
@@ -705,9 +615,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-
         //noinspection SimplifiableIfStatement
         switch (item.getItemId()) {
             case R.id.action_sort_criteria:
@@ -722,8 +629,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 return true;
             case R.id.action_back_home:
                 // Back to home page
-                Intent myIntent = new Intent(MainActivity.this, MainActivity.class);
-                MainActivity.this.startActivity(myIntent);
+                Intent myIntent = new Intent(LiveabilityUI.this, LiveabilityUI.class);
+                LiveabilityUI.this.startActivity(myIntent);
                 return true;
         }
 
@@ -735,11 +642,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
         public void click_cri_env(View v) {
-
             refreshData(CriteriaCat.ENVIRONMENT);
             flag = false;
             sort_popup.setVisibility(View.INVISIBLE);
-
         }
 
         public void click_cri_edu(View v){
@@ -954,8 +859,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(1.3521, 103.8198), 100));
        // googleMap.setOnCameraIdleListener(mClusterManager);
 
-        googleMap.getUiSettings().setMapToolbarEnabled(false);
         gm=googleMap;
+        googleMap.getUiSettings().setMapToolbarEnabled(false);
 
 
 

@@ -279,7 +279,7 @@ public class CriteriaActivity extends AppCompatActivity implements OnMapReadyCal
         switch (item.getItemId()) {
 
             case R.id.action_back_home:
-                Intent myIntent = new Intent(CriteriaActivity.this, MainActivity.class);
+                Intent myIntent = new Intent(CriteriaActivity.this, LiveabilityUI.class);
                 CriteriaActivity.this.startActivity(myIntent);
                 return true;
         }
