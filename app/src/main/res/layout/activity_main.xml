@@ -71,21 +71,6 @@
 
     </android.support.v4.widget.DrawerLayout>
 
-    <RelativeLayout
-        android:id="@+id/loadingPanel"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-
-        android:gravity="center">
-
-        <ProgressBar
-            android:id="@+id/pb"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminate="true" />
-
-    </RelativeLayout>
-
     <include
         android:id="@+id/sort_popper"
         layout="@layout/sort_popup"/>

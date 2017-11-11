@@ -344,17 +344,21 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
         districtRes=algoCtrl.sortDistrict(districtRes,criCat);
 
         for(int i=0;i<districtRes.size();i++) {
-            dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i+1), districtRes.get(i).getName(),false));
-
             switch(i){
                 case 0:
                     sRank1= districtRes.get(i).getValue();
+                    dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i+1), "first",false));
                     break;
                 case 1:
                     sRank2=  districtRes.get(i).getValue();
+                    dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i+1),"second",false));
                     break;
                 case 2:
                     sRank3= districtRes.get(i).getValue();
+                    dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i+1), "third",false));
+                    break;
+                default:
+                    dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i+1), districtRes.get(i).getName(),false));
                     break;
             }
         }
@@ -430,18 +434,23 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
 
 
                 for(int i=0;i<districtRes.size();i++) {
-                    dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i+1), districtRes.get(i).getName(),false));
+
 
                     switch(i){
                         case 0:
-
                             sRank1= districtRes.get(i).getValue();
+                            dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i+1), "first",false));
                             break;
                         case 1:
                             sRank2=  districtRes.get(i).getValue();
+                            dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i+1),"second",false));
                             break;
                         case 2:
                             sRank3= districtRes.get(i).getValue();
+                            dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i+1), "third",false));
+                            break;
+                        default:
+                            dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i+1), districtRes.get(i).getName(),false));
                             break;
                     }
                 }
@@ -532,21 +541,23 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
 
                 districtRes=algoCtrl.sortDistrict(dbctrl.getList(),criCat);
 
-                for(int i=0;i<districtRes.size();i++)
-                    Log.e(mLogTag,districtRes.get(i).getName());
 
                 for(int i=0;i<districtRes.size();i++) {
-                    dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i+1), districtRes.get(i).getName(),false));
-
                     switch(i){
                         case 0:
                             sRank1= districtRes.get(i).getValue();
+                            dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i+1), "first",false));
                             break;
                         case 1:
                             sRank2=  districtRes.get(i).getValue();
+                            dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i+1),"second",false));
                             break;
                         case 2:
                             sRank3= districtRes.get(i).getValue();
+                            dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i+1), "third",false));
+                            break;
+                        default:
+                            dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i+1), districtRes.get(i).getName(),false));
                             break;
                     }
                 }
@@ -588,7 +599,6 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
                 progressDialog.dismiss();
 
 
-                findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 
             }
         }.execute();

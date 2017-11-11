@@ -338,7 +338,6 @@ public class CriteriaActivity extends AppCompatActivity implements OnMapReadyCal
                         .strokeWidth(4));
 
                 gm.moveCamera(CameraUpdateFactory.newLatLngZoom(currLoc,13));
-                findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 
 
                 mClusterManager.setRenderer(new DefaultClusterRenderer<MyItem>(getApplicationContext(), gm, mClusterManager) {

@@ -16,6 +16,7 @@ public class DataModel {
     boolean isSelected;
 
 
+
     public DataModel(String score, String district, String ranking, String desc, boolean isSelected) {
         this.score = score;
         this.district = district;
