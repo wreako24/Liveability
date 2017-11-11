@@ -70,6 +70,7 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
     LiveableDBController dbctrl=new LiveableDBController();
     AlgoController algoCtrl=new AlgoController();
 
+
     Rank aRank = new Rank(6,CriteriaCat.ACCESSIBILITY);
     Rank bRank = new Rank(4,CriteriaCat.BUILDING);
     Rank eRank = new Rank(1,CriteriaCat.EDUCATION);
@@ -86,6 +87,7 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
     private static DistrictAdapter adapter;
     DatabaseReference mDatabase;
     private LinearLayout sort_popup;
+    final static int ZOOMLVL = 50;
 
 
 
@@ -337,6 +339,51 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
         dList.set(indexTwo, temp);
     }
 
+    public void filterData(CriteriaCat criCat){
+        districtRes=algoCtrl.sortDistrict(districtRes,criCat);
+
+        for(int i=0;i<districtRes.size();i++) {
+            dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i+1), districtRes.get(i).getName(),false));
+
+            switch(i){
+                case 0:
+                    sRank1= districtRes.get(i).getValue();
+                    break;
+                case 1:
+                    sRank2=  districtRes.get(i).getValue();
+                    break;
+                case 2:
+                    sRank3= districtRes.get(i).getValue();
+                    break;
+            }
+        }
+
+        adapter= new DistrictAdapter(dataModels,getApplicationContext());
+
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                DataModel dataModel= dataModels.get(position);
+
+                Intent myIntent = new Intent(LiveabilityUI.this, CriteriaActivity.class);
+                Bundle extras = new Bundle();
+                extras.putString("key",dataModel.getDistrict());
+                extras.putString("score",dataModel.getScore());
+                myIntent.putExtras(extras);
+
+                LiveabilityUI.this.startActivity(myIntent);
+
+
+            }
+        });
+
+        gm.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(districtRes.get(0).getRegionCoordinate().getLatitude(), districtRes.get(0).getRegionCoordinate().getLongitude()), ZOOMLVL));
+
+
+    }
+
 
     public void updateData(final CriteriaCat criCat){
 
@@ -380,14 +427,14 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
 
                 districtRes=algoCtrl.sortDistrict(dbctrl.getList(),criCat);
 
-                for(int i=0;i<districtRes.size();i++)
-                    Log.e(mLogTag,districtRes.get(i).getName());
+
 
                 for(int i=0;i<districtRes.size();i++) {
                     dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i+1), districtRes.get(i).getName(),false));
 
                     switch(i){
                         case 0:
+
                             sRank1= districtRes.get(i).getValue();
                             break;
                         case 1:
@@ -422,15 +469,6 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
 
 
                 display();
-
-
-
-                lwDistrictList.clear();
-
-                for (int i = 0; i < districtRes.size(); i++) {
-                    lwDistrictList.add(districtRes.get(i).getName());
-                }
-
 
 
                 super.onPostExecute(result);
@@ -551,10 +589,6 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
 
 
                 findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-
-
-
-
 
             }
         }.execute();
@@ -949,7 +983,7 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
 
 
                 gm.setOnMarkerClickListener(mClusterManager);
-                gm.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(districtRes.get(0).getRegionCoordinate().getLatitude(), districtRes.get(0).getRegionCoordinate().getLongitude()), 100));
+                gm.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(districtRes.get(0).getRegionCoordinate().getLatitude(), districtRes.get(0).getRegionCoordinate().getLongitude()), ZOOMLVL));
                 super.onPostExecute(result);
                 progressDialog.dismiss();
             }

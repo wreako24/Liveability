@@ -82,6 +82,15 @@ public class DistrictAdapter extends ArrayAdapter<DataModel> implements View.OnC
             result=convertView;
         }
 
+        if(dataModel.getRanking().equals("1"))
+        viewHolder.txtVersion.setTextColor(Color.parseColor("#ea5050"));
+
+        if(dataModel.getRanking().equals("2"))
+            viewHolder.txtVersion.setTextColor(Color.parseColor("#0092b7"));
+
+        if(dataModel.getRanking().equals("3"))
+            viewHolder.txtVersion.setTextColor(Color.parseColor("#18782c"));
+
         if (dataModel.isSelected()) {
             // set your color
              convertView.setBackgroundColor(Color.LTGRAY);
