@@ -87,7 +87,7 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
     private static DistrictAdapter adapter;
     DatabaseReference mDatabase;
     private LinearLayout sort_popup;
-    final static int ZOOMLVL = 13;
+    final static int ZOOMLVL = 17;
 
 
 
@@ -1013,7 +1013,7 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(1.3521, 103.8198), 100));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(1.3521, 103.8198), ZOOMLVL));
 
         gm=googleMap;
         googleMap.getUiSettings().setMapToolbarEnabled(false);

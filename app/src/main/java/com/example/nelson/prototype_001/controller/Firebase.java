@@ -26,6 +26,7 @@ public class Firebase implements DatabaseInterface {
     AlgoController algoCrtl=new AlgoController();
     ArrayList<District>districtRes;
     ArrayList<Double> scoreList;
+    Object d1;
 
     Coordinate c1;
 
@@ -390,5 +391,35 @@ public class Firebase implements DatabaseInterface {
         }
 
         return scoreList;
+    }
+
+    @Override
+    public Object getLocationDetails(String location, String type) {
+
+
+        final CountDownLatch latch=new CountDownLatch(1);
+
+        DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference();
+        mDatabase.keepSynced(true);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase.child("Location").child(location).child(type).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+               d1=dataSnapshot.getValue();
+               latch.countDown();
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }}
+        );
+
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return d1;
     }
 }

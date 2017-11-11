@@ -18,6 +18,7 @@ public class LiveableDBController {
     ArrayList<Double>scoreList;
 
 
+
     public void init(){
         db.initialize();
     }
@@ -46,6 +47,12 @@ public class LiveableDBController {
         scoreList=db.getScore(location);
 
         return scoreList;
+    }
+
+    public Object getDetails(String location,String type){
+        Object details=db.getLocationDetails(location,type);
+
+        return details;
     }
 
 

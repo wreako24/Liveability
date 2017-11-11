@@ -22,6 +22,8 @@ public interface DatabaseInterface {
 
     ArrayList<Double> getScore(String location);
 
+    Object getLocationDetails(String location, String type);
+
 
 
 }

@@ -1,7 +1,9 @@
 package com.example.nelson.prototype_001;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +15,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.nelson.prototype_001.adapter.CDetailAdapter;
+import com.example.nelson.prototype_001.controller.LiveableDBController;
 import com.example.nelson.prototype_001.entity.DataModel;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -41,6 +44,8 @@ public class CriteriaDetailActivity extends AppCompatActivity implements OnMapRe
     ListView listView;
     LatLng loc;
     private ArrayList<Marker> mMarkerArray = new ArrayList<Marker>();
+    LiveableDBController dbCtrl=new LiveableDBController();
+    Object snapshotVal;
 
     GoogleMap gm;
 
@@ -66,17 +71,45 @@ public class CriteriaDetailActivity extends AppCompatActivity implements OnMapRe
         dataModels= new ArrayList<>();
         listView=(ListView)findViewById(R.id.detail_list);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        mDatabase.child("Location").child(location).child(type).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+        new AsyncTask<Void, Void, String>() {
+            ProgressDialog progressDialog;
 
-                getCriteriaDetail((Map<String,Object>) dataSnapshot.getValue());
-            }
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }}
-        );
+            protected void onPreExecute() {
+                super.onPreExecute();
+
+
+                progressDialog = new ProgressDialog(CriteriaDetailActivity.this);
+                progressDialog.setMessage("Retrieving Details");
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+
+            }
+
+            @Override
+            protected String doInBackground(Void... params) {
+
+                snapshotVal=dbCtrl.getDetails(location,type);
+                return "";
+
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+
+                getCriteriaDetail((Map<String,Object>) snapshotVal);
+                super.onPostExecute(result);
+                progressDialog.dismiss();
+
+
+
+            }
+        }.execute();
+
+
+
+
+
 
     }
 
