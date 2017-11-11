@@ -48,25 +48,27 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 
 import java.util.ArrayList;
 
+
 public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallback{
 // Android objects
     private DrawerLayout draw;
     private boolean flag = false;
+    private boolean alreadyExecuted = false;
     private FloatingActionButton fab;
     private Button btnCancel;
     private Button btnApply;
     ArrayList<String> lwDistrictList =new ArrayList<>();
+    ArrayList<District>districtRes=new ArrayList<>();
+    LiveableDBController dbctrl=new LiveableDBController();
+    AlgoController algoCtrl=new AlgoController();
 
     Rank aRank = new Rank(6,CriteriaCat.ACCESSIBILITY);
     Rank bRank = new Rank(4,CriteriaCat.BUILDING);
@@ -79,7 +81,7 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
     private ClusterManager<MyItem> mClusterManager;
     private final static String mLogTag = "Main";
 
-    ArrayList<DataModel> dataModels;
+    ArrayList<DataModel> dataModels=new ArrayList<>();
     ListView listView;
     private static DistrictAdapter adapter;
     DatabaseReference mDatabase;
@@ -88,15 +90,14 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
 
 
     double sRank1,sRank2,sRank3;
-    ArrayList<District>districtRes=new ArrayList<>();
-    LiveableDBController dbctrl=new LiveableDBController();
-    AlgoController algoCtrl=new AlgoController();
+
+
     boolean clickFlag=true;
     boolean found=false;
 
 
 
-    private GoogleMap gm;
+    GoogleMap gm;
 
     ArrayList<Data>dList= new ArrayList<>();
 
@@ -108,10 +109,19 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle("Liveability");
+
+
+
+
         //Get Map
         final SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+
+
+
+
 
         dList.add(new Data(CriteriaCat.EDUCATION.toString(), R.drawable.education_icon));
         dList.add( new Data(CriteriaCat.TRANSPORT.toString(), R.drawable.transport_icon));
@@ -119,6 +129,8 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
         dList.add(new Data(CriteriaCat.ENVIRONMENT.toString(), R.drawable.environment_icon));
         dList.add(new Data(CriteriaCat.BUILDING.toString(), R.drawable.building_icon));
         dList.add(new Data(CriteriaCat.ACCESSIBILITY.toString(), R.drawable.accessiblity_icon));
+
+        mDatabase= FirebaseDatabase.getInstance().getReference();
 
 
         sort_popup = (LinearLayout) findViewById(R.id.lin_sort_container);
@@ -184,6 +196,7 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
 
 
 
+
         // Cancel Button to close the slider
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -237,15 +250,11 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
                 rankList.add(tRank);
                 rankList.add(eRank);
 
-
-                adapter.notifyDataSetChanged();
                 Log.e(mLogTag,String.valueOf(aRank.getRankWeightage()));
+
                 draw.closeDrawer(Gravity.RIGHT);
 
-
-                clickFlag=true;
-
-               refreshData(CriteriaCat.ORIGINAL);
+                updateData(CriteriaCat.ORIGINAL);
 
                 refreshList();
 
@@ -284,7 +293,12 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
         });
 
 
+
         initData(CriteriaCat.ORIGINAL);
+
+
+
+
 
     }
 
@@ -324,54 +338,50 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
     }
 
 
-    public void refreshData(final CriteriaCat criCat){
+    public void updateData(final CriteriaCat criCat){
+
+        new AsyncTask<Void, Void, String>() {
+            ProgressDialog progressDialog;
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
 
 
-        districtRes=dbctrl.refresh(rankList);
-        districtRes=algoCtrl.sortDistrict(districtRes,criCat);
+                progressDialog = new ProgressDialog(LiveabilityUI.this);
+                progressDialog.setMessage("Refreshing List");
+                progressDialog.setCancelable(false);
+                progressDialog.show();
 
-        for(int i=0;i<districtRes.size();i++) {
-            dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i+1), districtRes.get(i).getName(),false));
-
-            switch(i){
-                case 0:
-                    sRank1= districtRes.get(i).getValue();
-                    break;
-                case 1:
-                    sRank2=  districtRes.get(i).getValue();
-                    break;
-                case 2:
-                    sRank3= districtRes.get(i).getValue();
-                    break;
             }
 
-            adapter.notifyDataSetChanged();
+            @Override
+            protected String doInBackground(Void... params) {
 
-            for (int j = 0; j < districtRes.size(); i++) {
-                display(districtRes.get(j).getValue(), districtRes.get(j).getName());
+                dataModels= new ArrayList<>();
+                districtRes=new ArrayList<>();
+                dbctrl.refresh(rankList);
+
+
+                return "";
+
             }
 
-        }
-    }
+            @Override
+            protected void onPostExecute(String result) {
+
+                districtRes=dbctrl.getList();
+
+                districtRes=algoCtrl.sortDistrict(districtRes,criCat);
 
 
+                for(int i=0;i<districtRes.size();i++)
+                    Log.e(mLogTag,districtRes.get(i).getName());
 
-    public void initData(final CriteriaCat criCat){
+                districtRes=algoCtrl.sortDistrict(dbctrl.getList(),criCat);
 
-        districtRes.clear();
-        districtRes=new ArrayList<>();
-
-
-        dataModels= new ArrayList<>();
-
-
-
-
-               districtRes=dbctrl.init();
-               districtRes=algoCtrl.sortDistrict(districtRes,criCat);
-
-               for(int i=0;i<districtRes.size();i++)
-                   Log.e(mLogTag,districtRes.get(i).getName());
+                for(int i=0;i<districtRes.size();i++)
+                    Log.e(mLogTag,districtRes.get(i).getName());
 
                 for(int i=0;i<districtRes.size();i++) {
                     dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i+1), districtRes.get(i).getName(),false));
@@ -410,17 +420,145 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
                     }
                 });
 
-                    for (int i = 0; i < districtRes.size(); i++) {
-                        display(districtRes.get(i).getValue(), districtRes.get(i).getName());
+
+                display();
+
+
+
+                lwDistrictList.clear();
+
+                for (int i = 0; i < districtRes.size(); i++) {
+                    lwDistrictList.add(districtRes.get(i).getName());
+                }
+
+
+
+                super.onPostExecute(result);
+                progressDialog.dismiss();
+
+
+
+
+
+
+            }
+        }.execute();
+
+
+
+
+
+
+    }
+
+
+
+    public void initData(final CriteriaCat criCat){
+
+        new AsyncTask<Void, Void, String>() {
+            ProgressDialog progressDialog;
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+
+
+                progressDialog = new ProgressDialog(LiveabilityUI.this);
+                progressDialog.setMessage("Fetching Data");
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+
+            }
+
+            @Override
+            protected String doInBackground(Void... params) {
+
+                dataModels= new ArrayList<>();
+                districtRes=new ArrayList<>();
+                dbctrl.init() ;
+
+                return "";
+
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+
+                districtRes=dbctrl.getList();
+
+                districtRes=algoCtrl.sortDistrict(districtRes,CriteriaCat.ORIGINAL);
+
+
+                for(int i=0;i<districtRes.size();i++)
+                    Log.e(mLogTag,districtRes.get(i).getName());
+
+                districtRes=algoCtrl.sortDistrict(dbctrl.getList(),criCat);
+
+                for(int i=0;i<districtRes.size();i++)
+                    Log.e(mLogTag,districtRes.get(i).getName());
+
+                for(int i=0;i<districtRes.size();i++) {
+                    dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i+1), districtRes.get(i).getName(),false));
+
+                    switch(i){
+                        case 0:
+                            sRank1= districtRes.get(i).getValue();
+                            break;
+                        case 1:
+                            sRank2=  districtRes.get(i).getValue();
+                            break;
+                        case 2:
+                            sRank3= districtRes.get(i).getValue();
+                            break;
                     }
+                }
 
-                   lwDistrictList.clear();
+                adapter= new DistrictAdapter(dataModels,getApplicationContext());
 
-                   for (int i = 0; i < districtRes.size(); i++) {
-                       lwDistrictList.add(districtRes.get(i).getName());
-                   }
+                listView.setAdapter(adapter);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-              // updateCoor(districtRes.get(0).getRegionCoordinate());
+                        DataModel dataModel= dataModels.get(position);
+
+                        Intent myIntent = new Intent(LiveabilityUI.this, CriteriaActivity.class);
+                        Bundle extras = new Bundle();
+                        extras.putString("key",dataModel.getDistrict());
+                        extras.putString("score",dataModel.getScore());
+                        myIntent.putExtras(extras);
+
+                        LiveabilityUI.this.startActivity(myIntent);
+
+
+                    }
+                });
+
+
+                    display();
+
+
+
+                lwDistrictList.clear();
+
+                for (int i = 0; i < districtRes.size(); i++) {
+                    lwDistrictList.add(districtRes.get(i).getName());
+                }
+
+
+                super.onPostExecute(result);
+                progressDialog.dismiss();
+
+
+                findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+
+
+
+
+
+            }
+        }.execute();
+
             }
 
 
@@ -515,11 +653,6 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
                             super.onPreExecute();
 
 
-                            progressDialog = new ProgressDialog(LiveabilityUI.this);
-                            progressDialog.setMessage("Searching address");
-                            progressDialog.setCancelable(false);
-                            progressDialog.show();
-
                         }
 
                         @Override
@@ -532,7 +665,6 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
                                 Intent myIntent = new Intent(LiveabilityUI.this, CriteriaActivity.class);
                                 Bundle extras = new Bundle();
                                 extras.putString("key", district[0]);
-                                double score = 0;
                                 extras.putString("score", Double.toString(getScore(district[0])));
                                 myIntent.putExtras(extras);
 
@@ -611,42 +743,42 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
 
 
         public void click_cri_env(View v) {
-            refreshData(CriteriaCat.ENVIRONMENT);
+            updateData(CriteriaCat.ENVIRONMENT);
             flag = false;
             sort_popup.setVisibility(View.INVISIBLE);
         }
 
         public void click_cri_edu(View v){
-            refreshData(CriteriaCat.EDUCATION);
+            updateData(CriteriaCat.EDUCATION);
             flag = false;
             sort_popup.setVisibility(View.GONE);
         }
 
         public void click_cri_trans(View v){
-            refreshData(CriteriaCat.TRANSPORT);
+            updateData(CriteriaCat.TRANSPORT);
             flag = false;
             sort_popup.setVisibility(View.GONE);
         }
 
         public void click_cri_oc(View v){
-            refreshData(CriteriaCat.ORIGINAL);
+            updateData(CriteriaCat.ORIGINAL);
             flag = false;
             sort_popup.setVisibility(View.GONE);
         }
 
         public void click_cri_hc(View v){
-            refreshData(CriteriaCat.HEALTHCARE);
+            updateData(CriteriaCat.HEALTHCARE);
             flag = false;
             sort_popup.setVisibility(View.GONE);
         }
         public void click_cri_build(View v){
-            refreshData(CriteriaCat.BUILDING);
+            updateData(CriteriaCat.BUILDING);
             flag = false;
             sort_popup.setVisibility(View.GONE);
         }
 
         public void click_cri_access(View v){
-            refreshData(CriteriaCat.ACCESSIBILITY);
+            updateData(CriteriaCat.ACCESSIBILITY);
             flag = false;
             sort_popup.setVisibility(View.GONE);
         }
@@ -662,50 +794,63 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
         return score;
     }
 
-    private void updateCoor(Coordinate coor){
 
 
-                double lat=coor.getLatitude();
-                double lng=coor.getLongitude();
+    private void display() {
 
-
-
-
-                gm.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat,lng ), 17));
-                findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-
-
-    }
-
-
-    private void display(double weightage,String index) {
-
-
-
+        final double[] lat = new double[1];
+        final double[] lng = new double[1];
         gm.setOnCameraIdleListener(mClusterManager);
-
         mClusterManager = new ClusterManager<>(this, gm);
-        final String loc=index;
-        final double weight=weightage;
-        mDatabase.child("District").addListenerForSingleValueEvent(new ValueEventListener() {
+
+        new AsyncTask<Void, Void, String>() {
+            ProgressDialog progressDialog;
+
+
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
+            protected void onPreExecute() {
+                super.onPreExecute();
 
-                    snapshot.child(loc);
-                    double lat=0;
-                    double lng=0;
+                progressDialog = new ProgressDialog(LiveabilityUI.this);
+                progressDialog.setMessage("Generating UI");
+                progressDialog.setCancelable(false);
+                progressDialog.show();
 
 
-                    lat=Double.parseDouble(snapshot.child(loc).child("district_lat").getValue().toString());
-                    lng=Double.parseDouble(snapshot.child(loc).child("district_long").getValue().toString());
+            }
 
-                for (int r = 0; r < Math.round(weight); r++) {
+            @Override
+            protected String doInBackground(Void... params) {
 
-                        MyItem offsetItem = new MyItem(lat, lng, loc, loc);
+
+
+                for(int i=0;i<districtRes.size();i++){
+                    Coordinate retCoor=dbctrl.getCoor(districtRes.get(i).getName());
+                    lat[0] =retCoor.getLatitude();
+                    lng[0] =retCoor.getLongitude();
+                    Coordinate curr=new Coordinate(lat[0], lng[0]);
+                    districtRes.get(i).setRegionCoordinate(curr);
+
+                    for (int r = 0; r < Math.round(districtRes.get(i).getValue()); r++) {
+
+                        MyItem offsetItem = new MyItem(lat[0], lng[0],districtRes.get(i).getName(), districtRes.get(i).getName());
                         mClusterManager.addItem(offsetItem);
 
-
                     }
+
+
+                }
+
+                return "";
+
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+
+
+
+
 
                 mClusterManager.setRenderer(new DefaultClusterRenderer<MyItem>(getApplicationContext(), gm, mClusterManager) {
                     @Override
@@ -737,76 +882,78 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
 
 
 
-                        mClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<MyItem>() {
-                            @Override
-                            public boolean onClusterItemClick(MyItem item) {
-                                for (int i = 0; i < dataModels.size(); i++) {
-                                    dataModels.get(i).setSelected(false);
-                                }
+                mClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<MyItem>() {
+                    @Override
+                    public boolean onClusterItemClick(MyItem item) {
+                        for (int i = 0; i < dataModels.size(); i++) {
+                            dataModels.get(i).setSelected(false);
+                        }
 
-                                int selection = 0;
+                        int selection = 0;
 
-                                for (int i = 0; i < districtRes.size(); i++) {
-                                    if (districtRes.get(i).getName().equals(item.getTitle())) {
-                                        selection = i;
-                                        break;
-                                    }
-                                }
-
-                                Log.e(mLogTag, String.valueOf(listView.getItemAtPosition(selection)));
-
-
-                                dataModels.get(selection).setSelected(true);
-                                adapter.notifyDataSetChanged();
-
-                                listView.setSelection(selection);
-
-                                return false;
+                        for (int i = 0; i < districtRes.size(); i++) {
+                            if (districtRes.get(i).getName().equals(item.getTitle())) {
+                                selection = i;
+                                break;
                             }
-                        });
+                        }
 
-                        mClusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<MyItem>() {
-                            @Override
-                            public boolean onClusterClick(Cluster<MyItem> cluster) {
-
-                                Log.e("I clicked @ ", "Cluster which consumes whole list of ClusterItems");
+                        Log.e(mLogTag, String.valueOf(listView.getItemAtPosition(selection)));
 
 
-                                for(int i=0;i<dataModels.size();i++){
-                                    dataModels.get(i).setSelected(false);
+                        dataModels.get(selection).setSelected(true);
+                        adapter.notifyDataSetChanged();
+
+                        listView.setSelection(selection);
+
+                        return false;
+                    }
+                });
+
+                mClusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<MyItem>() {
+                    @Override
+                    public boolean onClusterClick(Cluster<MyItem> cluster) {
+
+                        Log.e("I clicked @ ", "Cluster which consumes whole list of ClusterItems");
+
+
+                        for(int i=0;i<dataModels.size();i++){
+                            dataModels.get(i).setSelected(false);
+                        }
+
+                        int selection =0;
+
+                        for (MyItem item : cluster.getItems()) {
+
+                            Log.e(mLogTag,item.getTitle());
+                            for(int i=0;i<districtRes.size();i++){
+                                if(districtRes.get(i).getName().equals(item.getTitle())){
+                                    selection=i;
+                                    break;
                                 }
-
-                                int selection =0;
-
-                                for (MyItem item : cluster.getItems()) {
-
-                                    Log.e(mLogTag,item.getTitle());
-                                    for(int i=0;i<districtRes.size();i++){
-                                        if(districtRes.get(i).getName().equals(item.getTitle())){
-                                            selection=i;
-                                            break;
-                                        }
-                                    }
-
-                                }
-                                Log.e(mLogTag,String.valueOf(listView.getItemAtPosition(selection)));
-
-
-                                dataModels.get(selection).setSelected(true);
-                                adapter.notifyDataSetChanged();
-
-                                listView.setSelection(selection);
-
-                                return false;
                             }
-                        });
+
+                        }
+                        Log.e(mLogTag,String.valueOf(listView.getItemAtPosition(selection)));
+
+
+                        dataModels.get(selection).setSelected(true);
+                        adapter.notifyDataSetChanged();
+
+                        listView.setSelection(selection);
+
+                        return false;
+                    }
+                });
 
 
 
                 gm.setOnMarkerClickListener(mClusterManager);
+                gm.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(districtRes.get(0).getRegionCoordinate().getLatitude(), districtRes.get(0).getRegionCoordinate().getLongitude()), 100));
+                super.onPostExecute(result);
+                progressDialog.dismiss();
             }
-            @Override public void onCancelled(DatabaseError error) { }
-        });
+        }.execute();
 
 
 
@@ -818,7 +965,6 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
     @Override
     public void onMapReady(GoogleMap googleMap) {
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(1.3521, 103.8198), 100));
-       // googleMap.setOnCameraIdleListener(mClusterManager);
 
         gm=googleMap;
         googleMap.getUiSettings().setMapToolbarEnabled(false);

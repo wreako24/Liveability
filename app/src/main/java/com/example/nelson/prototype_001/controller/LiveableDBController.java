@@ -1,15 +1,20 @@
 package com.example.nelson.prototype_001.controller;
 
-import android.app.ProgressDialog;
-import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.example.nelson.prototype_001.LiveabilityUI;
+import com.example.nelson.prototype_001.entity.Coordinate;
 import com.example.nelson.prototype_001.entity.District;
 import com.example.nelson.prototype_001.entity.Rank;
 import com.example.nelson.prototype_001.liveInterface.DatabaseInterface;
+import com.example.nelson.prototype_001.liveInterface.OnGetDataListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
+import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Nelson on 20/9/2017.
@@ -17,26 +22,34 @@ import java.util.ArrayList;
 
 public class LiveableDBController {
 
-    DatabaseInterface db=new Firebase();
-    ArrayList<District>districtRes=new ArrayList<>();
+    static DatabaseInterface db=new Firebase();
+    ArrayList<District>districtList;
 
 
-    public ArrayList<District> init(){
-
-
-        db=new Firebase();
-        districtRes=new ArrayList<>();
-        districtRes=db.initialize();
-
-        return districtRes;
+    public void init(){
+        db.initialize();
     }
 
-    public ArrayList<District> refresh(ArrayList<Rank>rankList){
-        districtRes=db.refreshData(rankList);
+    public Coordinate getCoor(String location){
+        Coordinate ret=db.getCoor(location);
 
-
-        return districtRes;
+        return ret;
     }
+
+
+    public void refresh(ArrayList<Rank>rankList){
+        db.refreshData(rankList);
+    }
+
+    public ArrayList<District> getList(){
+
+        districtList=db.getData();
+
+       return districtList;
+    }
+
+
+
 
 
 

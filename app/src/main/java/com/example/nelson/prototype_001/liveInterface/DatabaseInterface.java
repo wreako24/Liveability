@@ -1,5 +1,8 @@
 package com.example.nelson.prototype_001.liveInterface;
 
+import android.support.annotation.NonNull;
+
+import com.example.nelson.prototype_001.entity.Coordinate;
 import com.example.nelson.prototype_001.entity.District;
 import com.example.nelson.prototype_001.entity.Rank;
 
@@ -11,11 +14,13 @@ import java.util.ArrayList;
 
 public interface DatabaseInterface {
 
-    ArrayList<District> initialize();
+     void initialize();
 
-    ArrayList<District> refreshData(ArrayList<Rank>rankList);
+    Coordinate getCoor(String loc);
 
-    void getData();
+    void refreshData(ArrayList<Rank>rankList);
+
+    ArrayList<District> getData();
 
 
 
