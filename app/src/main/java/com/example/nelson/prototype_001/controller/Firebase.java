@@ -1,14 +1,11 @@
 package com.example.nelson.prototype_001.controller;
 
-import android.support.annotation.NonNull;
-
 import com.example.nelson.prototype_001.entity.Coordinate;
 import com.example.nelson.prototype_001.entity.Criteria;
 import com.example.nelson.prototype_001.entity.CriteriaCat;
 import com.example.nelson.prototype_001.entity.District;
 import com.example.nelson.prototype_001.entity.Rank;
 import com.example.nelson.prototype_001.liveInterface.DatabaseInterface;
-import com.example.nelson.prototype_001.liveInterface.OnGetDataListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,6 +25,7 @@ public class Firebase implements DatabaseInterface {
 
     AlgoController algoCrtl=new AlgoController();
     ArrayList<District>districtRes;
+    ArrayList<Double> scoreList;
 
     Coordinate c1;
 
@@ -338,5 +336,59 @@ public class Firebase implements DatabaseInterface {
 
      return districtRes;
 
+    }
+
+    @Override
+    public ArrayList<Double> getScore(final String location) {
+
+
+        final CountDownLatch latch=new CountDownLatch(1);
+        scoreList=new ArrayList<Double>();
+
+
+        DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference();
+        mDatabase.keepSynced(true);
+        mDatabase.child("Criteria").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+
+
+                snapshot.child(location);
+
+
+                if (snapshot.child(location).child("Environment").child("criteria_value").getValue() != null)
+                    scoreList.add(Double.parseDouble(snapshot.child(location).child("Environment").child("criteria_value").getValue().toString()));
+
+                if (snapshot.child(location).child("Healthcare").child("criteria_value").getValue() != null)
+                   scoreList.add(Double.parseDouble(snapshot.child(location).child("Healthcare").child("criteria_value").getValue().toString()));
+
+                if (snapshot.child(location).child("Building").child("criteria_value").getValue() != null)
+                    scoreList.add(Double.parseDouble(snapshot.child(location).child("Building").child("criteria_value").getValue().toString()));
+
+                if (snapshot.child(location).child("Education").child("criteria_value").getValue() != null)
+                    scoreList.add(Double.parseDouble(snapshot.child(location).child("Education").child("criteria_value").getValue().toString()));
+
+                if (snapshot.child(location).child("Transport").child("criteria_value").getValue() != null)
+                    scoreList.add(Double.parseDouble(snapshot.child(location).child("Transport").child("criteria_value").getValue().toString()));
+
+                if (snapshot.child(location).child("Accessibility").child("criteria_value").getValue() != null)
+                    scoreList.add(Double.parseDouble(snapshot.child(location).child("Accessibility").child("criteria_value").getValue().toString()));
+
+                latch.countDown();
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+            }
+        });
+
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return scoreList;
     }
 }

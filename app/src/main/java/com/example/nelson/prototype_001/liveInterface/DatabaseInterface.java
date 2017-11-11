@@ -1,7 +1,5 @@
 package com.example.nelson.prototype_001.liveInterface;
 
-import android.support.annotation.NonNull;
-
 import com.example.nelson.prototype_001.entity.Coordinate;
 import com.example.nelson.prototype_001.entity.District;
 import com.example.nelson.prototype_001.entity.Rank;
@@ -21,6 +19,8 @@ public interface DatabaseInterface {
     void refreshData(ArrayList<Rank>rankList);
 
     ArrayList<District> getData();
+
+    ArrayList<Double> getScore(String location);
 
 
 

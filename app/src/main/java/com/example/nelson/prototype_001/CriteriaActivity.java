@@ -1,7 +1,9 @@
 package com.example.nelson.prototype_001;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,6 +18,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.nelson.prototype_001.controller.LiveableDBController;
+import com.example.nelson.prototype_001.entity.Coordinate;
 import com.example.nelson.prototype_001.entity.MyItem;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -31,6 +35,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
+
+import java.util.ArrayList;
 
 public class CriteriaActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -56,6 +62,11 @@ public class CriteriaActivity extends AppCompatActivity implements OnMapReadyCal
     double eduValue=0;
     double transValue=0;
     double accessValue=0;
+
+    LiveableDBController dbCtrl= new LiveableDBController();
+
+    ArrayList<Double> scoreList;
+    Coordinate retCoor;
 
 
 
@@ -87,51 +98,44 @@ public class CriteriaActivity extends AppCompatActivity implements OnMapReadyCal
                 .findFragmentById(R.id.map_criteria);
         mapFragment.getMapAsync(this);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference();
 
+        new AsyncTask<Void, Void, String>() {
+            ProgressDialog progressDialog;
 
-        mDatabase.child("Criteria").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
+            protected void onPreExecute() {
+                super.onPreExecute();
 
 
-                snapshot.child(value);
+                progressDialog = new ProgressDialog(CriteriaActivity.this);
+                progressDialog.setMessage("Fetching Scores for "+value);
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+
+            }
+
+            @Override
+            protected String doInBackground(Void... params) {
+
+                scoreList=dbCtrl.getScore(value);
+                return "";
+
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+
+                envValue=scoreList.get(0);
+                hcValue=scoreList.get(1);
+                buildValue=scoreList.get(2);
+                eduValue=scoreList.get(3);
+                transValue=scoreList.get(4);
+                accessValue=scoreList.get(5);
 
 
-                if (snapshot.child(value).child("Environment").child("criteria_value").getValue() != null)
-                    envValue = Double.parseDouble(snapshot.child(value).child("Environment").child("criteria_value").getValue().toString());
 
-                if (snapshot.child(value).child("Healthcare").child("criteria_value").getValue() != null)
-                    hcValue = Double.parseDouble(snapshot.child(value).child("Healthcare").child("criteria_value").getValue().toString());
-
-                if (snapshot.child(value).child("Building").child("criteria_value").getValue() != null)
-                    buildValue = Double.parseDouble(snapshot.child(value).child("Building").child("criteria_value").getValue().toString());
-
-                if (snapshot.child(value).child("Education").child("criteria_value").getValue() != null)
-                    eduValue = Double.parseDouble(snapshot.child(value).child("Education").child("criteria_value").getValue().toString());
-
-                if (snapshot.child(value).child("Education").child("criteria_value").getValue() != null)
-                    eduValue = Double.parseDouble(snapshot.child(value).child("Education").child("criteria_value").getValue().toString());
-
-                if (snapshot.child(value).child("Transport").child("criteria_value").getValue() != null)
-                    transValue = Double.parseDouble(snapshot.child(value).child("Transport").child("criteria_value").getValue().toString());
-
-                if (snapshot.child(value).child("Accessibility").child("criteria_value").getValue() != null)
-                    accessValue = Double.parseDouble(snapshot.child(value).child("Accessibility").child("criteria_value").getValue().toString());
-
-                Log.e(mLogTag, Double.toString(envValue));
 
                 double total = envValue + hcValue + buildValue + eduValue + transValue + accessValue;
-
-                Log.e(mLogTag, Double.toString((envValue / total) * 100));
-
-               /* envValue=(int)((envValue/total)*100);
-                hcValue=(int)((hcValue/total)*100);
-                buildValue=(int)((buildValue/total)*100);
-                eduValue=(int)((eduValue/total)*100);
-                transValue=(int)((transValue/total)*100);
-                accessValue=(int)((accessValue/total)*100);
-*/
                 envText.setText(String.valueOf((int) ((envValue / total) * 100)) + "%");
                 hcText.setText(String.valueOf((int) ((hcValue / total) * 100)) + "%");
                 buildText.setText(String.valueOf((int) ((buildValue / total) * 100)) + "%");
@@ -139,17 +143,15 @@ public class CriteriaActivity extends AppCompatActivity implements OnMapReadyCal
                 transText.setText(String.valueOf((int) ((transValue / total) * 100)) + "%");
                 accessText.setText(String.valueOf((int) ((accessValue / total) * 100)) + "%");
 
-                Log.e(mLogTag, "Score : " + String.valueOf(score));
 
-                display(score, value);
+                display(score);
+                super.onPostExecute(result);
+                progressDialog.dismiss();
+
 
 
             }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-            }
-        });
+        }.execute();
 
 
         // Action Tool Bar consist of Search, Sort and Home button
@@ -284,26 +286,47 @@ public class CriteriaActivity extends AppCompatActivity implements OnMapReadyCal
         return super.onOptionsItemSelected(item);
     }
 
-    private void display(double weightage,String location) {
+    private void display(final double weightage) {
+
+        gm.setOnCameraIdleListener(mClusterManager);
 
         mClusterManager = new ClusterManager<>(this, gm);
-        final String loc=location;
-        final double weight=weightage;
-        mDatabase.child("District").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
 
-                snapshot.child(loc);
+        new AsyncTask<Void, Void, String>() {
+
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+
+            }
+
+            @Override
+            protected String doInBackground(Void... params) {
+
+
+
+
+                retCoor=new Coordinate();
+                retCoor=dbCtrl.getCoor(value);
+
+
+
+                return "";
+
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+
                 double lat=0;
                 double lng=0;
 
+                lat =retCoor.getLatitude();
+                lng =retCoor.getLongitude();
 
-                lat=Double.parseDouble(snapshot.child(loc).child("district_lat").getValue().toString());
-                lng=Double.parseDouble(snapshot.child(loc).child("district_long").getValue().toString());
-
-                Log.e(mLogTag, "Result:"+String.valueOf(weight));
-                for (int r = 0; r < (int)Math.round(weight); r++) {
-                    MyItem offsetItem = new MyItem(lat, lng, loc, loc);
+                for (int r = 0; r < (int)Math.round(weightage); r++) {
+                    MyItem offsetItem = new MyItem(lat, lng, value, value);
                     mClusterManager.addItem(offsetItem);
                 }
                 LatLng currLoc = new LatLng(lat, lng);
@@ -334,9 +357,12 @@ public class CriteriaActivity extends AppCompatActivity implements OnMapReadyCal
                 gm.setOnMarkerClickListener(mClusterManager);
 
 
+
+
+                super.onPostExecute(result);
             }
-            @Override public void onCancelled(DatabaseError error) { }
-        });
+        }.execute();
+
 
 
 

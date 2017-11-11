@@ -82,14 +82,22 @@ public class DistrictAdapter extends ArrayAdapter<DataModel> implements View.OnC
             result=convertView;
         }
 
-        if(dataModel.getRanking().equals("1"))
-        viewHolder.txtVersion.setTextColor(Color.parseColor("#ea5050"));
-
-        if(dataModel.getRanking().equals("2"))
+        if(dataModel.getRanking().equals("1")) {
+            viewHolder.txtVersion.setTextColor(Color.parseColor("#ea5050"));
+            viewHolder.txtLoc.setTextColor(Color.parseColor("#ea5050"));
+            viewHolder.txtScore.setTextColor(Color.parseColor("#ea5050"));
+        }
+        if(dataModel.getRanking().equals("2")) {
             viewHolder.txtVersion.setTextColor(Color.parseColor("#0092b7"));
+            viewHolder.txtLoc.setTextColor(Color.parseColor("#0092b7"));
+            viewHolder.txtScore.setTextColor(Color.parseColor("#0092b7"));
+        }
 
-        if(dataModel.getRanking().equals("3"))
+        if(dataModel.getRanking().equals("3")) {
             viewHolder.txtVersion.setTextColor(Color.parseColor("#18782c"));
+            viewHolder.txtLoc.setTextColor(Color.parseColor("#18782c"));
+            viewHolder.txtScore.setTextColor(Color.parseColor("#18782c"));
+        }
 
         if (dataModel.isSelected()) {
             // set your color
