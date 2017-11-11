@@ -23,6 +23,7 @@ public class LiveableDBController {
     }
 
     public Coordinate getCoor(String location){
+
         Coordinate ret=db.getCoor(location);
 
         return ret;

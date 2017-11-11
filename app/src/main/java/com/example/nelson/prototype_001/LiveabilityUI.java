@@ -686,6 +686,11 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
                         protected void onPreExecute() {
                             super.onPreExecute();
 
+                            progressDialog = new ProgressDialog(LiveabilityUI.this);
+                            progressDialog.setMessage("Searching Address...");
+                            progressDialog.setCancelable(false);
+                            progressDialog.show();
+
 
                         }
 

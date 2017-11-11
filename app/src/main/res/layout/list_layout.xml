@@ -30,7 +30,8 @@
         tools:layout_constraintLeft_creator="1"
         tools:layout_editor_absoluteX="94dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"></TextView>
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:ignore="MissingConstraints"></TextView>
 
     <CheckBox
         android:id="@+id/check"

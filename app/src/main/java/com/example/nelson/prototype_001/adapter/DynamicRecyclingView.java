@@ -101,7 +101,7 @@ public class DynamicRecyclingView extends ListView {
     /** Retrieves the view in the list corresponding to itemID */
     public View getViewForID (long itemID) {
         int firstVisiblePosition = getFirstVisiblePosition();
-        Adapter adapter = ((Adapter)getAdapter());
+        Adapter adapter = getAdapter();
         for(int i = 0; i < getChildCount(); i++) {
             View v = getChildAt(i);
             int position = firstVisiblePosition + i;
