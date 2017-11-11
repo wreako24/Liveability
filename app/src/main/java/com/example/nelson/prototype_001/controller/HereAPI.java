@@ -11,12 +11,12 @@ import org.json.JSONException;
  * Created by Nelson on 29/9/2017.
  */
 
-public class AddressToDistrictAPI {
+public class HereAPI {
 
     String district="null";
     private final static String mLogTag = "AtoD";
 
-    public AddressToDistrictAPI() {
+    public HereAPI() {
 
 
 

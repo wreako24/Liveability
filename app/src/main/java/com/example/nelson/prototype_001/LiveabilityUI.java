@@ -33,7 +33,7 @@ import com.example.nelson.prototype_001.adapter.Adapter;
 import com.example.nelson.prototype_001.adapter.DistrictAdapter;
 import com.example.nelson.prototype_001.adapter.DynamicRecyclingView;
 import com.example.nelson.prototype_001.adapter.Data;
-import com.example.nelson.prototype_001.controller.AddressToDistrictAPI;
+import com.example.nelson.prototype_001.controller.HereAPI;
 import com.example.nelson.prototype_001.controller.AlgoController;
 import com.example.nelson.prototype_001.controller.LiveableDBController;
 import com.example.nelson.prototype_001.entity.Coordinate;
@@ -658,7 +658,7 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
                         @Override
                         protected String doInBackground(Void... params) {
 
-                            AddressToDistrictAPI atd = new AddressToDistrictAPI();
+                            HereAPI atd = new HereAPI();
                             district[0] = atd.getDistrict(query);
 
                             if (!district[0].equals("null")) {
