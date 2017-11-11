@@ -340,6 +340,7 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
     }
 
     public void filterData(CriteriaCat criCat){
+        dataModels= new ArrayList<>();
         districtRes=algoCtrl.sortDistrict(districtRes,criCat);
 
         for(int i=0;i<districtRes.size();i++) {
@@ -378,6 +379,7 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
 
             }
         });
+        adapter.notifyDataSetChanged();
 
         gm.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(districtRes.get(0).getRegionCoordinate().getLatitude(), districtRes.get(0).getRegionCoordinate().getLongitude()), ZOOMLVL));
 
@@ -424,8 +426,6 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
 
                 for(int i=0;i<districtRes.size();i++)
                     Log.e(mLogTag,districtRes.get(i).getName());
-
-                districtRes=algoCtrl.sortDistrict(dbctrl.getList(),criCat);
 
 
 
@@ -782,42 +782,42 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
 
 
         public void click_cri_env(View v) {
-            updateData(CriteriaCat.ENVIRONMENT);
+          filterData(CriteriaCat.ENVIRONMENT);
             flag = false;
             sort_popup.setVisibility(View.INVISIBLE);
         }
 
         public void click_cri_edu(View v){
-            updateData(CriteriaCat.EDUCATION);
+            filterData(CriteriaCat.EDUCATION);
             flag = false;
             sort_popup.setVisibility(View.GONE);
         }
 
         public void click_cri_trans(View v){
-            updateData(CriteriaCat.TRANSPORT);
+            filterData(CriteriaCat.TRANSPORT);
             flag = false;
             sort_popup.setVisibility(View.GONE);
         }
 
         public void click_cri_oc(View v){
-            updateData(CriteriaCat.ORIGINAL);
+            filterData(CriteriaCat.ORIGINAL);
             flag = false;
             sort_popup.setVisibility(View.GONE);
         }
 
         public void click_cri_hc(View v){
-            updateData(CriteriaCat.HEALTHCARE);
+            filterData(CriteriaCat.HEALTHCARE);
             flag = false;
             sort_popup.setVisibility(View.GONE);
         }
         public void click_cri_build(View v){
-            updateData(CriteriaCat.BUILDING);
+            filterData(CriteriaCat.BUILDING);
             flag = false;
             sort_popup.setVisibility(View.GONE);
         }
 
         public void click_cri_access(View v){
-            updateData(CriteriaCat.ACCESSIBILITY);
+            filterData(CriteriaCat.ACCESSIBILITY);
             flag = false;
             sort_popup.setVisibility(View.GONE);
         }
