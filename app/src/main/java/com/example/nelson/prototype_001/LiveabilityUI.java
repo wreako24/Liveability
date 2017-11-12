@@ -77,6 +77,7 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
     Rank hRank = new Rank(2,CriteriaCat.HEALTHCARE);
     Rank enRank = new Rank(3,CriteriaCat.ENVIRONMENT);
     Rank tRank = new Rank(5,CriteriaCat.TRANSPORT);
+
     ArrayList<Rank>rankList;
 
     private ClusterManager<MyItem> mClusterManager;
@@ -131,6 +132,15 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
         dList.add(new Data(CriteriaCat.ENVIRONMENT.toString(), R.drawable.environment_icon));
         dList.add(new Data(CriteriaCat.BUILDING.toString(), R.drawable.building_icon));
         dList.add(new Data(CriteriaCat.ACCESSIBILITY.toString(), R.drawable.accessiblity_icon));
+
+        rankList=new ArrayList<>();
+
+        rankList.add(aRank);
+        rankList.add(bRank);
+        rankList.add(enRank);
+        rankList.add(hRank);
+        rankList.add(tRank);
+        rankList.add(eRank);
 
         mDatabase= FirebaseDatabase.getInstance().getReference();
 
@@ -777,8 +787,7 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
                 return true;
             case R.id.action_back_home:
                 // Back to home page
-                Intent myIntent = new Intent(LiveabilityUI.this, LiveabilityUI.class);
-                LiveabilityUI.this.startActivity(myIntent);
+                updateData(CriteriaCat.ORIGINAL);
                 return true;
         }
 

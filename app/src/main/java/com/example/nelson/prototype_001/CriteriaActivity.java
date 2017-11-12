@@ -373,6 +373,9 @@ public class CriteriaActivity extends AppCompatActivity implements OnMapReadyCal
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(1.3521, 103.8198), 10));
         googleMap.setOnCameraIdleListener(mClusterManager);
+        googleMap.getUiSettings().setMapToolbarEnabled(false);
+        googleMap.getUiSettings().setZoomControlsEnabled(true);
+        googleMap.setPadding(0,0,0,180);
 
         gm=googleMap;
     }

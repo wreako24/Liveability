@@ -186,6 +186,9 @@ public class CriteriaDetailActivity extends AppCompatActivity implements OnMapRe
     @Override
     public void onMapReady(GoogleMap googleMap) {
         gm=googleMap;
+
+        googleMap.getUiSettings().setZoomControlsEnabled(true);
+        googleMap.setPadding(0,0,0,180);
     }
 
     public void updateLoc(View v){
