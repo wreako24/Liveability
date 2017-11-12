@@ -218,8 +218,9 @@ public class CriteriaDetailActivity extends AppCompatActivity implements OnMapRe
         switch (item.getItemId()) {
 
             case R.id.action_back_home:
-                Intent myIntent = new Intent(CriteriaDetailActivity.this, LiveabilityUI.class);
-               CriteriaDetailActivity.this.startActivity(myIntent);
+                Intent i = new Intent(this, LiveabilityUI.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(i);
                 return true;
         }
         return super.onOptionsItemSelected(item);

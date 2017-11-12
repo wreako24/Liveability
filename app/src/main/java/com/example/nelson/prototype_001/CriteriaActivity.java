@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.example.nelson.prototype_001.controller.LiveableDBController;
 import com.example.nelson.prototype_001.entity.Coordinate;
 import com.example.nelson.prototype_001.entity.MyItem;
+import com.example.nelson.prototype_001.entity.Rank;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -279,8 +280,10 @@ public class CriteriaActivity extends AppCompatActivity implements OnMapReadyCal
         switch (item.getItemId()) {
 
             case R.id.action_back_home:
-                Intent myIntent = new Intent(CriteriaActivity.this, LiveabilityUI.class);
-                CriteriaActivity.this.startActivity(myIntent);
+                Intent i = new Intent(this, LiveabilityUI.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(i);
+
                 return true;
         }
         return super.onOptionsItemSelected(item);
