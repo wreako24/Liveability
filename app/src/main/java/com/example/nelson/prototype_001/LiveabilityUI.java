@@ -539,8 +539,6 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
                 for(int i=0;i<districtRes.size();i++)
                     Log.e(mLogTag,districtRes.get(i).getName());
 
-                districtRes=algoCtrl.sortDistrict(dbctrl.getList(),criCat);
-
 
                 for(int i=0;i<districtRes.size();i++) {
                     switch(i){
@@ -849,7 +847,7 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
 
         final double[] lat = new double[1];
         final double[] lng = new double[1];
-        gm.setOnCameraIdleListener(mClusterManager);
+
         mClusterManager = new ClusterManager<>(this, gm);
 
         new AsyncTask<Void, Void, String>() {
@@ -864,6 +862,9 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
                 progressDialog.setMessage("Generating UI");
                 progressDialog.setCancelable(false);
                 progressDialog.show();
+
+
+
 
 
             }
@@ -999,6 +1000,10 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
 
                 gm.setOnMarkerClickListener(mClusterManager);
                 gm.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(districtRes.get(0).getRegionCoordinate().getLatitude(), districtRes.get(0).getRegionCoordinate().getLongitude()), ZOOMLVL));
+                gm.setOnCameraIdleListener(mClusterManager);
+
+
+
                 super.onPostExecute(result);
                 progressDialog.dismiss();
             }

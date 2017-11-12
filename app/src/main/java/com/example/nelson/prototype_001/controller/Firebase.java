@@ -359,21 +359,33 @@ public class Firebase implements DatabaseInterface {
 
                 if (snapshot.child(location).child("Environment").child("criteria_value").getValue() != null)
                     scoreList.add(Double.parseDouble(snapshot.child(location).child("Environment").child("criteria_value").getValue().toString()));
+                else
+                    scoreList.add((double) 0);
 
                 if (snapshot.child(location).child("Healthcare").child("criteria_value").getValue() != null)
                    scoreList.add(Double.parseDouble(snapshot.child(location).child("Healthcare").child("criteria_value").getValue().toString()));
+                else
+                    scoreList.add((double) 0);
 
                 if (snapshot.child(location).child("Building").child("criteria_value").getValue() != null)
                     scoreList.add(Double.parseDouble(snapshot.child(location).child("Building").child("criteria_value").getValue().toString()));
+                else
+                    scoreList.add((double) 0);
 
                 if (snapshot.child(location).child("Education").child("criteria_value").getValue() != null)
                     scoreList.add(Double.parseDouble(snapshot.child(location).child("Education").child("criteria_value").getValue().toString()));
+                else
+                    scoreList.add((double) 0);
 
                 if (snapshot.child(location).child("Transport").child("criteria_value").getValue() != null)
                     scoreList.add(Double.parseDouble(snapshot.child(location).child("Transport").child("criteria_value").getValue().toString()));
+                else
+                    scoreList.add((double) 0);
 
                 if (snapshot.child(location).child("Accessibility").child("criteria_value").getValue() != null)
                     scoreList.add(Double.parseDouble(snapshot.child(location).child("Accessibility").child("criteria_value").getValue().toString()));
+                else
+                    scoreList.add((double) 0);
 
                 latch.countDown();
 
