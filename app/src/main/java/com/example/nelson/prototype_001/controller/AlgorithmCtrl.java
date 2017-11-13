@@ -12,7 +12,7 @@ import java.util.Comparator;
  * Created by Nelson on 20/9/2017.
  */
 
-public class AlgoController {
+public class AlgorithmCtrl {
 
     public double computeDistrictValue(District district){
         double value=0;

@@ -35,7 +35,7 @@ import com.example.nelson.prototype_001.adapter.DistrictAdapter;
 import com.example.nelson.prototype_001.adapter.DynamicRecyclingView;
 import com.example.nelson.prototype_001.adapter.Data;
 import com.example.nelson.prototype_001.controller.HereAPI;
-import com.example.nelson.prototype_001.controller.AlgoController;
+import com.example.nelson.prototype_001.controller.AlgorithmCtrl;
 import com.example.nelson.prototype_001.controller.LiveableDBController;
 import com.example.nelson.prototype_001.entity.Coordinate;
 import com.example.nelson.prototype_001.entity.CriteriaCat;
@@ -69,7 +69,7 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
     ArrayList<String> lwDistrictList = new ArrayList<>();
     ArrayList<District> districtRes = new ArrayList<>();
     LiveableDBController dbctrl = new LiveableDBController();
-    AlgoController algoCtrl = new AlgoController();
+    AlgorithmCtrl algoCtrl = new AlgorithmCtrl();
 
 
     Rank aRank = new Rank(6, CriteriaCat.ACCESSIBILITY);

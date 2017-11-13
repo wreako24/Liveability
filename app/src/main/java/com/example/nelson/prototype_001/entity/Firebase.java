@@ -1,6 +1,6 @@
 package com.example.nelson.prototype_001.entity;
 
-import com.example.nelson.prototype_001.controller.AlgoController;
+import com.example.nelson.prototype_001.controller.AlgorithmCtrl;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -18,7 +18,7 @@ public class Firebase implements DatabaseInterface {
 
 
 
-    AlgoController algoCrtl=new AlgoController();
+    AlgorithmCtrl algoCrtl=new AlgorithmCtrl();
     ArrayList<District>districtRes;
     ArrayList<Double> scoreList;
     Object d1;
