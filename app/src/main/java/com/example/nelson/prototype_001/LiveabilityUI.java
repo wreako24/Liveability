@@ -84,6 +84,7 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
     private final static String mLogTag = "Main";
 
     ArrayList<DataModel> dataModels=new ArrayList<>();
+    ArrayList<Data>dList= new ArrayList<>();
     ListView listView;
     private static DistrictAdapter adapter;
     DatabaseReference mDatabase;
@@ -93,16 +94,13 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
 
 
     double sRank1,sRank2,sRank3;
-
-
-    boolean clickFlag=true;
     boolean found=false;
 
 
 
     GoogleMap gm;
 
-    ArrayList<Data>dList= new ArrayList<>();
+
 
 
 
@@ -113,18 +111,10 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
         setContentView(R.layout.activity_main);
         setTitle("Liveability");
 
-
-
-
         //Get Map
         final SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-
-
-
-
 
         dList.add(new Data(CriteriaCat.EDUCATION.toString(), R.drawable.education_icon));
         dList.add( new Data(CriteriaCat.TRANSPORT.toString(), R.drawable.transport_icon));
@@ -304,13 +294,7 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
             }
         });
 
-
-
         initData(CriteriaCat.ORIGINAL);
-
-
-
-
 
     }
 
@@ -493,18 +477,8 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
                 super.onPostExecute(result);
                 progressDialog.dismiss();
 
-
-
-
-
-
             }
         }.execute();
-
-
-
-
-
 
     }
 
@@ -591,10 +565,7 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
                     }
                 });
 
-
                     display();
-
-
 
                 lwDistrictList.clear();
 
@@ -715,7 +686,7 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
                         @Override
                         protected String doInBackground(Void... params) {
 
-                            HereAPI atd = new HereAPI();
+                            HereAPI atd = new HereAPI(lwDistrictList);
                             district[0] = atd.getDistrict(query);
 
                             if (!district[0].equals("null")) {
@@ -1033,11 +1004,6 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
         googleMap.getUiSettings().setMapToolbarEnabled(false);
         googleMap.getUiSettings().setZoomControlsEnabled(true);
         googleMap.setPadding(0,0,0,180);
-
-
-
-
-
 
     }
 }

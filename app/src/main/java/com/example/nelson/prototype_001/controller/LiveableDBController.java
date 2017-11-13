@@ -2,6 +2,7 @@ package com.example.nelson.prototype_001.controller;
 
 import com.example.nelson.prototype_001.entity.Coordinate;
 import com.example.nelson.prototype_001.entity.District;
+import com.example.nelson.prototype_001.entity.Firebase;
 import com.example.nelson.prototype_001.entity.Rank;
 import com.example.nelson.prototype_001.liveInterface.DatabaseInterface;
 
@@ -50,6 +51,8 @@ public class LiveableDBController {
     }
 
     public Object getDetails(String location,String type){
+
+
         Object details=db.getLocationDetails(location,type);
 
         return details;

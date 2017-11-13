@@ -2,10 +2,13 @@ package com.example.nelson.prototype_001.controller;
 
 import android.util.Log;
 
+import com.example.nelson.prototype_001.entity.District;
 import com.example.nelson.prototype_001.utility.DistrictReader;
 import com.example.nelson.prototype_001.utility.HTTPHandler;
 
 import org.json.JSONException;
+
+import java.util.ArrayList;
 
 /**
  * Created by Nelson on 29/9/2017.
@@ -14,12 +17,12 @@ import org.json.JSONException;
 public class HereAPI {
 
     String district="null";
+    boolean found;
     private final static String mLogTag = "AtoD";
+    ArrayList<String>districtList=new ArrayList<>();
 
-    public HereAPI() {
-
-
-
+    public HereAPI( ArrayList<String>districtList ) {
+        this.districtList=districtList;
     }
 
     public String getDistrict(String searchTerm){
@@ -36,10 +39,16 @@ public class HereAPI {
             district="null";
             e.printStackTrace();
         }
-        if(district.equals("null")) {
-            Log.e(mLogTag,"Object is null");
+
+        for(int i=0;i<districtList.size();i++){
+            if(districtList.get(i).equals(district))
+                found=true;
+        }
+
+        if(district.equals("null")||!found) {
             district="null";
         }
+
 
         return district;
     }

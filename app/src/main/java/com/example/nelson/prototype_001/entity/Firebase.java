@@ -1,5 +1,6 @@
-package com.example.nelson.prototype_001.controller;
+package com.example.nelson.prototype_001.entity;
 
+import com.example.nelson.prototype_001.controller.AlgoController;
 import com.example.nelson.prototype_001.entity.Coordinate;
 import com.example.nelson.prototype_001.entity.Criteria;
 import com.example.nelson.prototype_001.entity.CriteriaCat;

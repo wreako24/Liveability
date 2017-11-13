@@ -36,7 +36,7 @@ import java.util.Map;
 
 public class CriteriaDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    DatabaseReference mDatabase;
+
     String location;
     String type;
     private static CDetailAdapter adapter;

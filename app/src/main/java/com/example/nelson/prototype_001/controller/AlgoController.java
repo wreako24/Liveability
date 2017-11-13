@@ -35,7 +35,7 @@ public class AlgoController {
                 }
             });
         }
-
+        else
         if(criCat.equals(CriteriaCat.ORIGINAL)){
             Collections.sort(sortDistrict, new Comparator<District>() {
                 @Override
@@ -44,7 +44,7 @@ public class AlgoController {
                 }
             });
         }
-
+        else
         if(criCat.equals(CriteriaCat.TRANSPORT)){
             Collections.sort(sortDistrict, new Comparator<District>() {
                 @Override
@@ -53,7 +53,7 @@ public class AlgoController {
                 }
             });
         }
-
+        else
         if(criCat.equals(CriteriaCat.HEALTHCARE)){
             Collections.sort(sortDistrict, new Comparator<District>() {
                 @Override
@@ -62,7 +62,7 @@ public class AlgoController {
                 }
             });
         }
-
+        else
         if(criCat.equals(CriteriaCat.ENVIRONMENT)){
             Collections.sort(sortDistrict, new Comparator<District>() {
                 @Override
@@ -71,7 +71,7 @@ public class AlgoController {
                 }
             });
         }
-
+        else
         if(criCat.equals(CriteriaCat.EDUCATION)){
             Collections.sort(sortDistrict, new Comparator<District>() {
                 @Override
@@ -80,7 +80,7 @@ public class AlgoController {
                 }
             });
         }
-
+        else
         if(criCat.equals(CriteriaCat.BUILDING)){
             Collections.sort(sortDistrict, new Comparator<District>() {
                 @Override
