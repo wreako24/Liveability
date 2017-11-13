@@ -1,4 +1,4 @@
-package com.example.nelson.prototype_001;
+package com.example.nelson.prototype_001.Boundary;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.nelson.prototype_001.R;
 import com.example.nelson.prototype_001.adapter.CDetailAdapter;
 import com.example.nelson.prototype_001.controller.LiveableDBController;
 import com.example.nelson.prototype_001.entity.DataModel;
@@ -25,11 +26,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package com.example.nelson.prototype_001;
+package com.example.nelson.prototype_001.Boundary;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -29,6 +29,7 @@ import android.widget.Toast;
 import android.widget.Button;
 
 
+import com.example.nelson.prototype_001.R;
 import com.example.nelson.prototype_001.adapter.Adapter;
 import com.example.nelson.prototype_001.adapter.DistrictAdapter;
 import com.example.nelson.prototype_001.adapter.DynamicRecyclingView;
@@ -57,34 +58,34 @@ import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import java.util.ArrayList;
 
 
-public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallback{
-// Android objects
+public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallback {
+    // Android objects
     private DrawerLayout draw;
     private boolean flag = false;
     private boolean alreadyExecuted = false;
     private FloatingActionButton fab;
     private Button btnCancel;
     private Button btnApply;
-    ArrayList<String> lwDistrictList =new ArrayList<>();
-    ArrayList<District>districtRes=new ArrayList<>();
-    LiveableDBController dbctrl=new LiveableDBController();
-    AlgoController algoCtrl=new AlgoController();
+    ArrayList<String> lwDistrictList = new ArrayList<>();
+    ArrayList<District> districtRes = new ArrayList<>();
+    LiveableDBController dbctrl = new LiveableDBController();
+    AlgoController algoCtrl = new AlgoController();
 
 
-    Rank aRank = new Rank(6,CriteriaCat.ACCESSIBILITY);
-    Rank bRank = new Rank(4,CriteriaCat.BUILDING);
-    Rank eRank = new Rank(1,CriteriaCat.EDUCATION);
-    Rank hRank = new Rank(2,CriteriaCat.HEALTHCARE);
-    Rank enRank = new Rank(3,CriteriaCat.ENVIRONMENT);
-    Rank tRank = new Rank(5,CriteriaCat.TRANSPORT);
+    Rank aRank = new Rank(6, CriteriaCat.ACCESSIBILITY);
+    Rank bRank = new Rank(4, CriteriaCat.BUILDING);
+    Rank eRank = new Rank(1, CriteriaCat.EDUCATION);
+    Rank hRank = new Rank(2, CriteriaCat.HEALTHCARE);
+    Rank enRank = new Rank(3, CriteriaCat.ENVIRONMENT);
+    Rank tRank = new Rank(5, CriteriaCat.TRANSPORT);
 
-    ArrayList<Rank>rankList;
+    ArrayList<Rank> rankList;
 
     private ClusterManager<MyItem> mClusterManager;
     private final static String mLogTag = "Main";
 
-    ArrayList<DataModel> dataModels=new ArrayList<>();
-    ArrayList<Data>dList= new ArrayList<>();
+    ArrayList<DataModel> dataModels = new ArrayList<>();
+    ArrayList<Data> dList = new ArrayList<>();
     ListView listView;
     private static DistrictAdapter adapter;
     DatabaseReference mDatabase;
@@ -92,16 +93,11 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
     final static int ZOOMLVL = 17;
 
 
-
-    double sRank1,sRank2,sRank3;
-    boolean found=false;
-
+    double sRank1, sRank2, sRank3;
+    boolean found = false;
 
 
     GoogleMap gm;
-
-
-
 
 
     @Override
@@ -117,13 +113,13 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
         mapFragment.getMapAsync(this);
 
         dList.add(new Data(CriteriaCat.EDUCATION.toString(), R.drawable.education_icon));
-        dList.add( new Data(CriteriaCat.TRANSPORT.toString(), R.drawable.transport_icon));
+        dList.add(new Data(CriteriaCat.TRANSPORT.toString(), R.drawable.transport_icon));
         dList.add(new Data(CriteriaCat.HEALTHCARE.toString(), R.drawable.healthcare_icon));
         dList.add(new Data(CriteriaCat.ENVIRONMENT.toString(), R.drawable.environment_icon));
         dList.add(new Data(CriteriaCat.BUILDING.toString(), R.drawable.building_icon));
         dList.add(new Data(CriteriaCat.ACCESSIBILITY.toString(), R.drawable.accessiblity_icon));
 
-        rankList=new ArrayList<>();
+        rankList = new ArrayList<>();
 
         rankList.add(aRank);
         rankList.add(bRank);
@@ -132,12 +128,11 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
         rankList.add(tRank);
         rankList.add(eRank);
 
-        mDatabase= FirebaseDatabase.getInstance().getReference();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
 
         sort_popup = (LinearLayout) findViewById(R.id.lin_sort_container);
-        listView=(ListView)findViewById(R.id.list);
-
+        listView = (ListView) findViewById(R.id.list);
 
 
         // Find ID and load to object
@@ -152,12 +147,11 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(draw.isDrawerOpen(GravityCompat.END)) {
+                if (draw.isDrawerOpen(GravityCompat.END)) {
                     // Close the drawer and set the background
                     draw.closeDrawer(Gravity.RIGHT);
                     fab.setVisibility(View.VISIBLE);
-                }
-                else{
+                } else {
 
                     // Open the drawer and set the background
                     draw.openDrawer(Gravity.RIGHT);
@@ -168,7 +162,7 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
 
         fab.setAlpha((float) 0.7);
 
-        final DynamicRecyclingView listView = (DynamicRecyclingView)findViewById(R.id.listView1);
+        final DynamicRecyclingView listView = (DynamicRecyclingView) findViewById(R.id.listView1);
         final Adapter adapter = new Adapter(this, dList);
 
         listView.setHoverOperation(new HoverOperationAllSwap(dList
@@ -179,24 +173,20 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         listView.setOnTouchListener(new View.OnTouchListener() {
 
-                                        @Override
-                                        public boolean onTouch(View view, MotionEvent motionEvent) {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
 
-                                            switch (motionEvent.getAction()) {
-                                                case MotionEvent.ACTION_MOVE:
-                                                    // popup the listView
-                                                    int pos= listView.pointToPosition((int) motionEvent.getX(), (int) motionEvent.getY());
-                                                    Log.e(mLogTag, String.valueOf(pos));
-                                                    listView.startMoveById(listView.getItemIdAtPosition(pos));
-                                                    break;
-                                            }
-                                            return false;
-                                        }
-                                    });
-
-
-
-
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_MOVE:
+                        // popup the listView
+                        int pos = listView.pointToPosition((int) motionEvent.getX(), (int) motionEvent.getY());
+                        Log.e(mLogTag, String.valueOf(pos));
+                        listView.startMoveById(listView.getItemIdAtPosition(pos));
+                        break;
+                }
+                return false;
+            }
+        });
 
 
         // Cancel Button to close the slider
@@ -220,30 +210,30 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
             @Override
             public void onClick(View view) {
                 for (int i = 0; i < dList.size(); i++) {
-                    switch(dList.get(i).title){
+                    switch (dList.get(i).title) {
                         case "ACCESSIBILITY":
-                            aRank.setPosition(i+1,CriteriaCat.ACCESSIBILITY);
+                            aRank.setPosition(i + 1, CriteriaCat.ACCESSIBILITY);
                             break;
                         case "BUILDING":
-                            bRank.setPosition(i+1,CriteriaCat.BUILDING);
+                            bRank.setPosition(i + 1, CriteriaCat.BUILDING);
                             break;
                         case "ENVIRONMENT":
-                            enRank.setPosition(i+1,CriteriaCat.ENVIRONMENT);
+                            enRank.setPosition(i + 1, CriteriaCat.ENVIRONMENT);
                             break;
                         case "HEALTHCARE":
-                            hRank.setPosition(i+1,CriteriaCat.HEALTHCARE);
+                            hRank.setPosition(i + 1, CriteriaCat.HEALTHCARE);
                             break;
                         case "TRANSPORT":
-                            tRank.setPosition(i+1,CriteriaCat.TRANSPORT);
+                            tRank.setPosition(i + 1, CriteriaCat.TRANSPORT);
                             break;
                         case "EDUCATION":
-                            eRank.setPosition(i+1,CriteriaCat.EDUCATION);
+                            eRank.setPosition(i + 1, CriteriaCat.EDUCATION);
                     }
 
 
                 }
 
-                rankList=new ArrayList<>();
+                rankList = new ArrayList<>();
 
                 rankList.add(aRank);
                 rankList.add(bRank);
@@ -252,7 +242,7 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
                 rankList.add(tRank);
                 rankList.add(eRank);
 
-                Log.e(mLogTag,String.valueOf(aRank.getRankWeightage()));
+                Log.e(mLogTag, String.valueOf(aRank.getRankWeightage()));
 
                 draw.closeDrawer(Gravity.RIGHT);
 
@@ -299,32 +289,32 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
     }
 
 
-    public void refreshList(){
+    //Refresh the ranking list
+    public void refreshList() {
 
         for (int j = 0; j < dList.size(); j++) {
             switch (dList.get(j).title) {
                 case "ACCESSIBILITY":
-                    swap(j,aRank.getPosition()-1);
+                    swap(j, aRank.getPosition() - 1);
                     break;
                 case "BUILDING":
-                    swap(j,bRank.getPosition()-1);
+                    swap(j, bRank.getPosition() - 1);
                     break;
                 case "ENVIRONMENT":
-                    swap(j,enRank.getPosition()-1);
+                    swap(j, enRank.getPosition() - 1);
                     break;
                 case "HEALTHCARE":
-                    swap(j,hRank.getPosition()-1);
+                    swap(j, hRank.getPosition() - 1);
                     break;
                 case "TRANSPORT":
-                    swap(j,tRank.getPosition()-1);
+                    swap(j, tRank.getPosition() - 1);
                     break;
                 case "EDUCATION":
-                    swap(j,eRank.getPosition()-1);
+                    swap(j, eRank.getPosition() - 1);
                     break;
             }
         }
     }
-
 
 
     public void swap(int indexOne, int indexTwo) {
@@ -333,43 +323,43 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
         dList.set(indexTwo, temp);
     }
 
-    public void filterData(CriteriaCat criCat){
-        dataModels= new ArrayList<>();
-        districtRes=algoCtrl.sortDistrict(districtRes,criCat);
+    public void filterData(CriteriaCat criCat) {
+        dataModels = new ArrayList<>();
+        districtRes = algoCtrl.sortDistrict(districtRes, criCat);
 
-        for(int i=0;i<districtRes.size();i++) {
-            switch(i){
+        for (int i = 0; i < districtRes.size(); i++) {
+            switch (i) {
                 case 0:
-                    sRank1= districtRes.get(i).getValue();
-                    dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i+1), "first",false));
+                    sRank1 = districtRes.get(i).getValue();
+                    dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i + 1), "first", false));
                     break;
                 case 1:
-                    sRank2=  districtRes.get(i).getValue();
-                    dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i+1),"second",false));
+                    sRank2 = districtRes.get(i).getValue();
+                    dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i + 1), "second", false));
                     break;
                 case 2:
-                    sRank3= districtRes.get(i).getValue();
-                    dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i+1), "third",false));
+                    sRank3 = districtRes.get(i).getValue();
+                    dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i + 1), "third", false));
                     break;
                 default:
-                    dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i+1), districtRes.get(i).getName(),false));
+                    dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i + 1), districtRes.get(i).getName(), false));
                     break;
             }
         }
 
-        adapter= new DistrictAdapter(dataModels,getApplicationContext());
+        adapter = new DistrictAdapter(dataModels, getApplicationContext());
 
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                DataModel dataModel= dataModels.get(position);
+                DataModel dataModel = dataModels.get(position);
 
                 Intent myIntent = new Intent(LiveabilityUI.this, CriteriaActivity.class);
                 Bundle extras = new Bundle();
-                extras.putString("key",dataModel.getDistrict());
-                extras.putString("score",dataModel.getScore());
+                extras.putString("key", dataModel.getDistrict());
+                extras.putString("score", dataModel.getScore());
                 myIntent.putExtras(extras);
 
                 LiveabilityUI.this.startActivity(myIntent);
@@ -379,13 +369,15 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
         });
         adapter.notifyDataSetChanged();
 
+        display();
+
         gm.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(districtRes.get(0).getRegionCoordinate().getLatitude(), districtRes.get(0).getRegionCoordinate().getLongitude()), ZOOMLVL));
 
 
     }
 
 
-    public void updateData(final CriteriaCat criCat){
+    public void updateData(final CriteriaCat criCat) {
 
         new AsyncTask<Void, Void, String>() {
             ProgressDialog progressDialog;
@@ -405,8 +397,8 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
             @Override
             protected String doInBackground(Void... params) {
 
-                dataModels= new ArrayList<>();
-                districtRes=new ArrayList<>();
+                dataModels = new ArrayList<>();
+                districtRes = new ArrayList<>();
                 dbctrl.refresh(rankList);
 
 
@@ -417,51 +409,50 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
             @Override
             protected void onPostExecute(String result) {
 
-                districtRes=dbctrl.getList();
+                districtRes = dbctrl.getList();
 
-                districtRes=algoCtrl.sortDistrict(districtRes,criCat);
-
-
-                for(int i=0;i<districtRes.size();i++)
-                    Log.e(mLogTag,districtRes.get(i).getName());
+                districtRes = algoCtrl.sortDistrict(districtRes, criCat);
 
 
+                for (int i = 0; i < districtRes.size(); i++)
+                    Log.e(mLogTag, districtRes.get(i).getName());
 
-                for(int i=0;i<districtRes.size();i++) {
+
+                for (int i = 0; i < districtRes.size(); i++) {
 
 
-                    switch(i){
+                    switch (i) {
                         case 0:
-                            sRank1= districtRes.get(i).getValue();
-                            dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i+1), "first",false));
+                            sRank1 = districtRes.get(i).getValue();
+                            dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i + 1), "first", false));
                             break;
                         case 1:
-                            sRank2=  districtRes.get(i).getValue();
-                            dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i+1),"second",false));
+                            sRank2 = districtRes.get(i).getValue();
+                            dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i + 1), "second", false));
                             break;
                         case 2:
-                            sRank3= districtRes.get(i).getValue();
-                            dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i+1), "third",false));
+                            sRank3 = districtRes.get(i).getValue();
+                            dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i + 1), "third", false));
                             break;
                         default:
-                            dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i+1), districtRes.get(i).getName(),false));
+                            dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i + 1), districtRes.get(i).getName(), false));
                             break;
                     }
                 }
 
-                adapter= new DistrictAdapter(dataModels,getApplicationContext());
+                adapter = new DistrictAdapter(dataModels, getApplicationContext());
 
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                        DataModel dataModel= dataModels.get(position);
+                        DataModel dataModel = dataModels.get(position);
 
                         Intent myIntent = new Intent(LiveabilityUI.this, CriteriaActivity.class);
                         Bundle extras = new Bundle();
-                        extras.putString("key",dataModel.getDistrict());
-                        extras.putString("score",dataModel.getScore());
+                        extras.putString("key", dataModel.getDistrict());
+                        extras.putString("score", dataModel.getScore());
                         myIntent.putExtras(extras);
 
                         LiveabilityUI.this.startActivity(myIntent);
@@ -483,8 +474,7 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
     }
 
 
-
-    public void initData(final CriteriaCat criCat){
+    public void initData(final CriteriaCat criCat) {
 
         new AsyncTask<Void, Void, String>() {
             ProgressDialog progressDialog;
@@ -504,9 +494,9 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
             @Override
             protected String doInBackground(Void... params) {
 
-                dataModels= new ArrayList<>();
-                districtRes=new ArrayList<>();
-                dbctrl.init() ;
+                dataModels = new ArrayList<>();
+                districtRes = new ArrayList<>();
+                dbctrl.init();
 
                 return "";
 
@@ -515,48 +505,48 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
             @Override
             protected void onPostExecute(String result) {
 
-                districtRes=dbctrl.getList();
+                districtRes = dbctrl.getList();
 
-                districtRes=algoCtrl.sortDistrict(districtRes,CriteriaCat.ORIGINAL);
-
-
-                for(int i=0;i<districtRes.size();i++)
-                    Log.e(mLogTag,districtRes.get(i).getName());
+                districtRes = algoCtrl.sortDistrict(districtRes, CriteriaCat.ORIGINAL);
 
 
-                for(int i=0;i<districtRes.size();i++) {
-                    switch(i){
+                for (int i = 0; i < districtRes.size(); i++)
+                    Log.e(mLogTag, districtRes.get(i).getName());
+
+
+                for (int i = 0; i < districtRes.size(); i++) {
+                    switch (i) {
                         case 0:
-                            sRank1= districtRes.get(i).getValue();
-                            dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i+1), "first",false));
+                            sRank1 = districtRes.get(i).getValue();
+                            dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i + 1), "first", false));
                             break;
                         case 1:
-                            sRank2=  districtRes.get(i).getValue();
-                            dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i+1),"second",false));
+                            sRank2 = districtRes.get(i).getValue();
+                            dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i + 1), "second", false));
                             break;
                         case 2:
-                            sRank3= districtRes.get(i).getValue();
-                            dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i+1), "third",false));
+                            sRank3 = districtRes.get(i).getValue();
+                            dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i + 1), "third", false));
                             break;
                         default:
-                            dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i+1), districtRes.get(i).getName(),false));
+                            dataModels.add(new DataModel(Double.toString(districtRes.get(i).getValue()), districtRes.get(i).getName(), Integer.toString(i + 1), districtRes.get(i).getName(), false));
                             break;
                     }
                 }
 
-                adapter= new DistrictAdapter(dataModels,getApplicationContext());
+                adapter = new DistrictAdapter(dataModels, getApplicationContext());
 
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                        DataModel dataModel= dataModels.get(position);
+                        DataModel dataModel = dataModels.get(position);
 
                         Intent myIntent = new Intent(LiveabilityUI.this, CriteriaActivity.class);
                         Bundle extras = new Bundle();
-                        extras.putString("key",dataModel.getDistrict());
-                        extras.putString("score",dataModel.getScore());
+                        extras.putString("key", dataModel.getDistrict());
+                        extras.putString("score", dataModel.getScore());
                         myIntent.putExtras(extras);
 
                         LiveabilityUI.this.startActivity(myIntent);
@@ -565,7 +555,7 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
                     }
                 });
 
-                    display();
+                display();
 
                 lwDistrictList.clear();
 
@@ -578,11 +568,10 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
                 progressDialog.dismiss();
 
 
-
             }
         }.execute();
 
-            }
+    }
 
 
     @Override
@@ -601,7 +590,7 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
         searchView.setIconifiedByDefault(false);
         // Do not iconify the widget; expand it by default
 
-        final SearchView.SearchAutoComplete searchAutoComplete = (SearchView.SearchAutoComplete)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        final SearchView.SearchAutoComplete searchAutoComplete = (SearchView.SearchAutoComplete) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
         searchAutoComplete.setTextColor(Color.WHITE);
 
         if (searchAutoComplete != null) {
@@ -616,13 +605,13 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
                                     long id) {
                 // TODO Auto-generated method stub
 
-                String searchString=(String)parent.getItemAtPosition(position);
-                searchAutoComplete.setText(""+searchString);
+                String searchString = (String) parent.getItemAtPosition(position);
+                searchAutoComplete.setText("" + searchString);
 
                 Intent myIntent = new Intent(LiveabilityUI.this, CriteriaActivity.class);
                 Bundle extras = new Bundle();
-                extras.putString("key",searchString);
-                extras.putString("score",Double.toString(getScore(searchString)));
+                extras.putString("key", searchString);
+                extras.putString("score", Double.toString(getScore(searchString)));
                 myIntent.putExtras(extras);
 
                 LiveabilityUI.this.startActivity(myIntent);
@@ -636,7 +625,6 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
         searchAutoComplete.setAdapter(adapter);
 
 
-
         SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
             public boolean onQueryTextChange(String query) {
                 // this is your adapter that will be filtered
@@ -648,18 +636,18 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
             public boolean onQueryTextSubmit(final String query) {
                 //Here u can get the value "query" which is entered in the search box.
 
-                found=false;
+                found = false;
                 final String[] district = new String[1];
 
-                Log.e(mLogTag,query);
+                Log.e(mLogTag, query);
 
-                for(int i=0;i<districtRes.size();i++){
-                    if(query.equals(districtRes.get(i).getName())){
-                        found=true;
+                for (int i = 0; i < districtRes.size(); i++) {
+                    if (query.equals(districtRes.get(i).getName())) {
+                        found = true;
                         Intent myIntent = new Intent(LiveabilityUI.this, CriteriaActivity.class);
                         Bundle extras = new Bundle();
-                        extras.putString("key",query);
-                        extras.putString("score",Double.toString(getScore(query)));
+                        extras.putString("key", query);
+                        extras.putString("score", Double.toString(getScore(query)));
                         myIntent.putExtras(extras);
 
                         LiveabilityUI.this.startActivity(myIntent);
@@ -667,7 +655,7 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
 
                 }
 
-                if(!found) {
+                if (!found) {
                     new AsyncTask<Void, Void, String>() {
                         ProgressDialog progressDialog;
 
@@ -710,13 +698,13 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
                             super.onPostExecute(result);
                             progressDialog.dismiss();
 
-                            if(district[0].equals("null"))
-                                Toast.makeText(getApplicationContext(),"Address Not Found",Toast.LENGTH_SHORT).show();
+                            if (district[0].equals("null"))
+                                Toast.makeText(getApplicationContext(), "Address Not Found", Toast.LENGTH_SHORT).show();
 
 
                         }
                     }.execute();
-                    found=false;
+                    found = false;
                 }
 
                 hideKeyboardwithoutPopulate(LiveabilityUI.this);
@@ -725,7 +713,6 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
         };
 
         searchView.setOnQueryTextListener(queryTextListener);
-
 
 
         return true;
@@ -763,64 +750,61 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
         }
 
 
-            return super.onOptionsItemSelected(item);
-        }
+        return super.onOptionsItemSelected(item);
+    }
 
 
+    public void click_cri_env(View v) {
+        filterData(CriteriaCat.ENVIRONMENT);
+        flag = false;
+        sort_popup.setVisibility(View.INVISIBLE);
+    }
+
+    public void click_cri_edu(View v) {
+        filterData(CriteriaCat.EDUCATION);
+        flag = false;
+        sort_popup.setVisibility(View.GONE);
+    }
+
+    public void click_cri_trans(View v) {
+        filterData(CriteriaCat.TRANSPORT);
+        flag = false;
+        sort_popup.setVisibility(View.GONE);
+    }
+
+    public void click_cri_oc(View v) {
+        filterData(CriteriaCat.ORIGINAL);
+        flag = false;
+        sort_popup.setVisibility(View.GONE);
+    }
+
+    public void click_cri_hc(View v) {
+        filterData(CriteriaCat.HEALTHCARE);
+        flag = false;
+        sort_popup.setVisibility(View.GONE);
+    }
+
+    public void click_cri_build(View v) {
+        filterData(CriteriaCat.BUILDING);
+        flag = false;
+        sort_popup.setVisibility(View.GONE);
+    }
+
+    public void click_cri_access(View v) {
+        filterData(CriteriaCat.ACCESSIBILITY);
+        flag = false;
+        sort_popup.setVisibility(View.GONE);
+    }
 
 
-        public void click_cri_env(View v) {
-          filterData(CriteriaCat.ENVIRONMENT);
-            flag = false;
-            sort_popup.setVisibility(View.INVISIBLE);
-        }
-
-        public void click_cri_edu(View v){
-            filterData(CriteriaCat.EDUCATION);
-            flag = false;
-            sort_popup.setVisibility(View.GONE);
-        }
-
-        public void click_cri_trans(View v){
-            filterData(CriteriaCat.TRANSPORT);
-            flag = false;
-            sort_popup.setVisibility(View.GONE);
-        }
-
-        public void click_cri_oc(View v){
-            filterData(CriteriaCat.ORIGINAL);
-            flag = false;
-            sort_popup.setVisibility(View.GONE);
-        }
-
-        public void click_cri_hc(View v){
-            filterData(CriteriaCat.HEALTHCARE);
-            flag = false;
-            sort_popup.setVisibility(View.GONE);
-        }
-        public void click_cri_build(View v){
-            filterData(CriteriaCat.BUILDING);
-            flag = false;
-            sort_popup.setVisibility(View.GONE);
-        }
-
-        public void click_cri_access(View v){
-            filterData(CriteriaCat.ACCESSIBILITY);
-            flag = false;
-            sort_popup.setVisibility(View.GONE);
-        }
-
-
-
-    private double getScore(String searchString){
-        double score=0;
-        for(int i=0;i<districtRes.size();i++){
-            if(districtRes.get(i).getName().equals(searchString))
-                score=districtRes.get(i).getValue();
+    private double getScore(String searchString) {
+        double score = 0;
+        for (int i = 0; i < districtRes.size(); i++) {
+            if (districtRes.get(i).getName().equals(searchString))
+                score = districtRes.get(i).getValue();
         }
         return score;
     }
-
 
 
     private void display() {
@@ -843,27 +827,22 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
                 progressDialog.setCancelable(false);
                 progressDialog.show();
 
-
-
-
-
             }
 
             @Override
             protected String doInBackground(Void... params) {
 
 
-
-                for(int i=0;i<districtRes.size();i++){
-                    Coordinate retCoor=dbctrl.getCoor(districtRes.get(i).getName());
-                    lat[0] =retCoor.getLatitude();
-                    lng[0] =retCoor.getLongitude();
-                    Coordinate curr=new Coordinate(lat[0], lng[0]);
+                for (int i = 0; i < districtRes.size(); i++) {
+                    Coordinate retCoor = dbctrl.getCoor(districtRes.get(i).getName());
+                    lat[0] = retCoor.getLatitude();
+                    lng[0] = retCoor.getLongitude();
+                    Coordinate curr = new Coordinate(lat[0], lng[0]);
                     districtRes.get(i).setRegionCoordinate(curr);
 
                     for (int r = 0; r < Math.round(districtRes.get(i).getValue()); r++) {
 
-                        MyItem offsetItem = new MyItem(lat[0], lng[0],districtRes.get(i).getName(), districtRes.get(i).getName());
+                        MyItem offsetItem = new MyItem(lat[0], lng[0], districtRes.get(i).getName(), districtRes.get(i).getName());
                         mClusterManager.addItem(offsetItem);
 
                     }
@@ -878,10 +857,6 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
             @Override
             protected void onPostExecute(String result) {
 
-
-
-
-
                 mClusterManager.setRenderer(new DefaultClusterRenderer<MyItem>(getApplicationContext(), gm, mClusterManager) {
                     @Override
                     protected String getClusterText(int bucket) {
@@ -895,21 +870,19 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
 
                     @Override
                     protected int getColor(int clusterSize) {
-                        if(clusterSize==sRank1){
+                        if (clusterSize == sRank1) {
                             return Color.parseColor("#ea5050");
                         }
-                        if(clusterSize==sRank2){
+                        if (clusterSize == sRank2) {
                             return Color.parseColor("#0092b7");
                         }
-                        if(clusterSize==sRank3){
-                            return  Color.parseColor("#18782c");
-                        }
-                        else
+                        if (clusterSize == sRank3) {
+                            return Color.parseColor("#18782c");
+                        } else
                             return Color.parseColor("#57554b"); // Return any color you want here. You can base it on clusterSize.
 
                     }
                 });
-
 
 
                 mClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<MyItem>() {
@@ -947,24 +920,24 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
                         Log.e("I clicked @ ", "Cluster which consumes whole list of ClusterItems");
 
 
-                        for(int i=0;i<dataModels.size();i++){
+                        for (int i = 0; i < dataModels.size(); i++) {
                             dataModels.get(i).setSelected(false);
                         }
 
-                        int selection =0;
+                        int selection = 0;
 
                         for (MyItem item : cluster.getItems()) {
 
-                            Log.e(mLogTag,item.getTitle());
-                            for(int i=0;i<districtRes.size();i++){
-                                if(districtRes.get(i).getName().equals(item.getTitle())){
-                                    selection=i;
+                            Log.e(mLogTag, item.getTitle());
+                            for (int i = 0; i < districtRes.size(); i++) {
+                                if (districtRes.get(i).getName().equals(item.getTitle())) {
+                                    selection = i;
                                     break;
                                 }
                             }
 
                         }
-                        Log.e(mLogTag,String.valueOf(listView.getItemAtPosition(selection)));
+                        Log.e(mLogTag, String.valueOf(listView.getItemAtPosition(selection)));
 
 
                         dataModels.get(selection).setSelected(true);
@@ -977,33 +950,26 @@ public class LiveabilityUI extends AppCompatActivity implements OnMapReadyCallba
                 });
 
 
-
                 gm.setOnMarkerClickListener(mClusterManager);
                 gm.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(districtRes.get(0).getRegionCoordinate().getLatitude(), districtRes.get(0).getRegionCoordinate().getLongitude()), ZOOMLVL));
                 gm.setOnCameraIdleListener(mClusterManager);
-
 
 
                 super.onPostExecute(result);
                 progressDialog.dismiss();
             }
         }.execute();
-
-
-
-
     }
-
 
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(1.3521, 103.8198), ZOOMLVL));
 
-        gm=googleMap;
+        gm = googleMap;
         googleMap.getUiSettings().setMapToolbarEnabled(false);
         googleMap.getUiSettings().setZoomControlsEnabled(true);
-        googleMap.setPadding(0,0,0,180);
+        googleMap.setPadding(0, 0, 0, 180);
 
     }
 }

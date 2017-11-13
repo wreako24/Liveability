@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1.5"
-        tools:context="com.example.nelson.prototype_001.LiveabilityUI" />
+        tools:context="com.example.nelson.prototype_001.Boundary.LiveabilityUI" />
 
     <RelativeLayout
         android:layout_width="match_parent"

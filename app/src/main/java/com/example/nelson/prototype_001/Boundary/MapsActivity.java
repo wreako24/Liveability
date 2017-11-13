@@ -1,4 +1,4 @@
-package com.example.nelson.prototype_001;
+package com.example.nelson.prototype_001.Boundary;
 
 import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import com.example.nelson.prototype_001.R;
 import com.example.nelson.prototype_001.utility.HTTPHandler;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
