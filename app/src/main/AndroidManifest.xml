@@ -21,7 +21,7 @@
         <activity
 
 
-        android:name=".Boundary.SplashActivity"
+        android:name=".boundary.SplashActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:theme="@style/SplashTheme">
@@ -44,7 +44,7 @@
         -->
 
         <activity
-            android:name=".Boundary.LiveabilityUI"
+            android:name=".boundary.LiveabilityUI"
             android:label="Main" />
 
         <meta-data
@@ -52,10 +52,10 @@
             android:value="AIzaSyDxKT0LCoM9PtqXy0CjF0gkSMdirVISX0s" />
 
         <activity
-            android:name=".Boundary.CriteriaActivity"
+            android:name=".boundary.CriteriaActivity"
             android:label="Criteria" />
         <activity
-            android:name=".Boundary.CriteriaDetailActivity"
+            android:name=".boundary.CriteriaDetailActivity"
             android:label="@string/title_activity_criteria_detail"></activity>
     </application>
 

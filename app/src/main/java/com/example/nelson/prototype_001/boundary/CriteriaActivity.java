@@ -1,4 +1,4 @@
-package com.example.nelson.prototype_001.Boundary;
+package com.example.nelson.prototype_001.boundary;
 
 import android.app.ProgressDialog;
 import android.content.Intent;

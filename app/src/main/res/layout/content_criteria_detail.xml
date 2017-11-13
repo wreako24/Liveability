@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        tools:context="com.example.nelson.prototype_001.Boundary.LiveabilityUI" />
+        tools:context="com.example.nelson.prototype_001.boundary.LiveabilityUI" />
 
     <ListView
         android:id="@+id/detail_list"
@@ -24,7 +24,7 @@
         android:clipToPadding="true"
         android:dividerHeight="1dp"
         android:soundEffectsEnabled="true"
-        tools:context="com.example.nelson.prototype_001.Boundary.CriteriaDetailActivity">
+        tools:context="com.example.nelson.prototype_001.boundary.CriteriaDetailActivity">
 
     </ListView>
 

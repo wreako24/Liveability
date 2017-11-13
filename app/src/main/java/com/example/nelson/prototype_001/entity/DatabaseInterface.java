@@ -1,4 +1,4 @@
-package com.example.nelson.prototype_001.liveInterface;
+package com.example.nelson.prototype_001.entity;
 
 import com.example.nelson.prototype_001.entity.Coordinate;
 import com.example.nelson.prototype_001.entity.District;

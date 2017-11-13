@@ -4,7 +4,7 @@ import com.example.nelson.prototype_001.entity.Coordinate;
 import com.example.nelson.prototype_001.entity.District;
 import com.example.nelson.prototype_001.entity.Firebase;
 import com.example.nelson.prototype_001.entity.Rank;
-import com.example.nelson.prototype_001.liveInterface.DatabaseInterface;
+import com.example.nelson.prototype_001.entity.DatabaseInterface;
 
 import java.util.ArrayList;
 

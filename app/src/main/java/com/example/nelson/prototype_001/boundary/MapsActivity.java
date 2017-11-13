@@ -1,33 +1,14 @@
-package com.example.nelson.prototype_001.Boundary;
+package com.example.nelson.prototype_001.boundary;
 
-import android.app.ProgressDialog;
-import android.content.pm.PackageManager;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
-import android.widget.Toast;
 
 import com.example.nelson.prototype_001.R;
-import com.example.nelson.prototype_001.utility.HTTPHandler;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public abstract class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 

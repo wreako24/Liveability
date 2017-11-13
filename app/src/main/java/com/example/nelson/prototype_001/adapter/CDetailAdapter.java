@@ -10,7 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.nelson.prototype_001.Boundary.PinClick;
+import com.example.nelson.prototype_001.boundary.PinClick;
 import com.example.nelson.prototype_001.R;
 import com.example.nelson.prototype_001.entity.DataModel;
 

@@ -1,12 +1,6 @@
 package com.example.nelson.prototype_001.entity;
 
 import com.example.nelson.prototype_001.controller.AlgoController;
-import com.example.nelson.prototype_001.entity.Coordinate;
-import com.example.nelson.prototype_001.entity.Criteria;
-import com.example.nelson.prototype_001.entity.CriteriaCat;
-import com.example.nelson.prototype_001.entity.District;
-import com.example.nelson.prototype_001.entity.Rank;
-import com.example.nelson.prototype_001.liveInterface.DatabaseInterface;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;

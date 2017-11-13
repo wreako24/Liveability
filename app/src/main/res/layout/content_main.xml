@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        tools:context="com.example.nelson.prototype_001.Boundary.LiveabilityUI" />
+        tools:context="com.example.nelson.prototype_001.boundary.LiveabilityUI" />
 
     <LinearLayout
         android:id="@+id/linearLayoutHeading"
@@ -59,7 +59,7 @@
     </LinearLayout>
     <ListView
         android:id="@+id/list"
-        tools:context="com.example.nelson.prototype_001.Boundary.LiveabilityUI"
+        tools:context="com.example.nelson.prototype_001.boundary.LiveabilityUI"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:cacheColorHint="#0000"
